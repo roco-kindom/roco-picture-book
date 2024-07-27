@@ -9,4 +9,5 @@ import com.lanier.roco.picturebook.database.Constant
 data class Skin(
     @PrimaryKey val id: String,
     @ColumnInfo val name: String,
+    @ColumnInfo val quality: String,
 )
