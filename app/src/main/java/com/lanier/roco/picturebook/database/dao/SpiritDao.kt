@@ -59,6 +59,6 @@ interface SpiritDao {
     @Query("select * from skin")
     fun getAllSkins() : List<Skin>
 
-    @Query("select * from spirit order by id desc limit :limit offset :offset")
+    @Query("select * from spirit order by cast(id as integer) desc limit :limit offset :offset")
     fun getSpiritsByPage(offset: Int, limit: Int = 20) : List<Spirit>
 }
