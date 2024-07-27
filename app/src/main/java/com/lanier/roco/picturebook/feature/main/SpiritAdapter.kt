@@ -52,7 +52,7 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
                         val totalItemCount = layoutManager.itemCount
                         val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
-                        if (totalItemCount <= (lastVisibleItem + 3)) {
+                        if (totalItemCount <= lastVisibleItem + 1) {
                             onLoadMoreListener?.onLoadMore()
                         }
                     }
@@ -99,22 +99,27 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (_data.size == 0 || position == _data.size + 1) {
+        if (_data.size == 0) {
             return LOADING_VIEW_TYPE
         }
-        return if (isEnd) ITEM_VIEW_END else ITEM_VIEW_TYPE
+        if (position == _data.size) {
+            return if (isEnd) ITEM_VIEW_END else LOADING_VIEW_TYPE
+        }
+        return ITEM_VIEW_TYPE
     }
 }
 
 class SpiritViewHolder(view: View) : ViewHolder(view) {
 
     val avatar = view.findViewById<ShapeableImageView>(R.id.ivAvatar)
+    val spiritId = view.findViewById<TextView>(R.id.tvID)
     val name = view.findViewById<TextView>(R.id.tvName)
     val property1 = view.findViewById<ShapeableImageView>(R.id.ivProperty1)
     val property2 = view.findViewById<ShapeableImageView>(R.id.ivProperty2)
 
     fun bind(spirit: Spirit) {
         AppData.loadSpiritAvatar(avatar, spirit.iconSrc)
+        spiritId.text = spirit.id
         name.text = spirit.name
         val properties = spirit.property.split(",")
         if (properties.size == 2) {

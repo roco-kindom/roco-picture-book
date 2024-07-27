@@ -49,7 +49,5 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-        viewmodel.load()
     }
 }
