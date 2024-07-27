@@ -56,6 +56,8 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.fragment.ktx)
 
+    implementation(libs.coil)
+
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.room.compiler)
     implementation(libs.androidx.room.ktx)
