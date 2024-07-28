@@ -106,9 +106,9 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (_data.size == 0) {
-            return LOADING_VIEW_TYPE
-        }
+//        if (_data.size == 0) {
+//            return LOADING_VIEW_TYPE
+//        }
         if (position == _data.size) {
             return if (isEnd) ITEM_VIEW_END else LOADING_VIEW_TYPE
         }
