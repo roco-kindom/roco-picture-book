@@ -42,23 +42,30 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
         notifyItemRangeChanged(startIndex, list.size)
     }
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                recyclerView.layoutManager?.let { layoutManager ->
-                    if (layoutManager is GridLayoutManager) {
-                        val totalItemCount = layoutManager.itemCount
-                        val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+    private val onScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            recyclerView.layoutManager?.let { layoutManager ->
+                if (layoutManager is GridLayoutManager) {
+                    val totalItemCount = layoutManager.itemCount
+                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
-                        if (totalItemCount <= lastVisibleItem + 1) {
-                            onLoadMoreListener?.onLoadMore()
-                        }
+                    if (totalItemCount <= lastVisibleItem + 1) {
+                        onLoadMoreListener?.onLoadMore()
                     }
                 }
             }
-        })
+        }
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        recyclerView.addOnScrollListener(onScrollListener)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        recyclerView.removeOnScrollListener(onScrollListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
