@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/title_sync_type">
+
+        <ListPreference
+            android:key="@string/key_sync_type"
+            android:dialogTitle="@string/title_dialog_choose_sync_type"
+            android:title="@string/title_first_sync_type"
+            android:entries="@array/sync_type"
+            android:entryValues="@array/sync_type_values"
+            android:defaultValue="2"/>
+
+        <Preference
+            android:key="@string/key_last_sync_time"
+            android:title="@string/title_last_sync_time" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/title_sync_choice">
+
+        <CheckBoxPreference
+            android:title="@string/title_sync_spirit"
+            android:enabled="false"
+            android:summary="@string/title_sync_spirit_summary"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="@string/key_sync_skill"
+            android:title="@string/title_sync_skill"
+            android:summary="@string/title_sync_skill_summary"
+            android:enabled="false"/>
+
+        <CheckBoxPreference
+            android:key="@string/key_sync_props"
+            android:title="@string/title_sync_props"
+            android:summary="@string/title_sync_props_summary"
+            android:enabled="false"/>
+
+        <CheckBoxPreference
+            android:key="@string/key_sync_scene"
+            android:title="@string/title_sync_scene"
+            android:enabled="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/title_preference_sundry">
+
+        <Preference
+            android:key="@string/key_sundry_version"
+            android:title="@string/title_sundry_version"/>
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

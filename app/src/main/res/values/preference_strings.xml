@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="key_sync_type">key_sync_type</string>
+    <string name="key_last_sync_time">key_last_sync_time</string>
+    <string name="key_sync_skill">key_sync_skill</string>
+    <string name="key_sync_props">key_sync_props</string>
+    <string name="key_sync_scene">key_sync_scene</string>
+    <string name="key_sundry_version">key_sundry_version</string>
+
+    <string name="title_sync_type">同步方式</string>
+    <string name="title_dialog_choose_sync_type">选择同步方式</string>
+    <string name="title_first_sync_type">优先同步方式</string>
+    <string name="title_last_sync_time">上次同步时间</string>
+
+    <string name="title_sync_choice">同步选项</string>
+    <string name="title_sync_spirit">同步精灵相关</string>
+    <string name="title_sync_spirit_summary">精灵基本信息、属性、皮肤、蛋组、血脉</string>
+    <string name="title_sync_skill">同步技能相关</string>
+    <string name="title_sync_skill_summary">技能、天气环境</string>
+    <string name="title_sync_props">同步道具</string>
+    <string name="title_sync_props_summary">包含农场种子</string>
+    <string name="title_sync_scene">同步场景</string>
+
+    <string name="title_preference_sundry">杂项</string>
+    <string name="title_sundry_version">版本号</string>
+</resources>

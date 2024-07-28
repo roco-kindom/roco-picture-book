@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="sync_type">
+        <item>官网数据库</item>
+        <item>缓存数据库</item>
+    </string-array>
+
+    <string-array name="sync_type_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+</resources>
