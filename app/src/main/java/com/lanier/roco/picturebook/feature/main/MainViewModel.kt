@@ -20,9 +20,9 @@ class MainViewModel : ViewModel() {
     val spirits = MutableLiveData<Triple<Int, List<Spirit>, Boolean>>()
     val syncAction = MutableLiveData<SyncAction>()
 
-    fun sync() {
+    fun sync(fromServer: Boolean) {
         DbSyncManager.syncData(
-            forceSync = true,
+            forceSync = fromServer,
             onStart = { syncAction.value = SyncAction.Loading },
             onWarning = {},
             onCompleted = { b, t -> syncAction.value = SyncAction.Completed(b, t) }

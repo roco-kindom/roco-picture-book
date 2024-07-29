@@ -1,7 +1,12 @@
 package com.lanier.roco.picturebook.manager
 
-sealed interface SyncType {
+sealed class SyncType(val type: String) {
 
-    data object Server : SyncType
-    data object CacheFile : SyncType
+    companion object {
+        const val syncOfServer = "1"
+        const val syncOfCacheFile = "2"
+    }
+
+    data object Server : SyncType(syncOfServer)
+    data object CacheFile : SyncType(syncOfCacheFile)
 }

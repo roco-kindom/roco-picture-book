@@ -15,7 +15,9 @@ import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.ext.launchSafe
 import com.lanier.roco.picturebook.feature.setting.SettingsActivity
+import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.manager.SyncAction
+import com.lanier.roco.picturebook.manager.SyncType
 import com.lanier.roco.picturebook.widget.CommonLoading
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
@@ -44,7 +46,15 @@ class MainActivity : AppCompatActivity() {
         SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
             key?.let {
                 if (it == getString(R.string.key_sync_type)) {
-                    println(">>>> value = ${sharedPreferences.getString(key, "")}")
+                    val value = sharedPreferences.getString(key, "")
+                    if (value.isNullOrEmpty().not()) {
+                        if (value == SyncType.syncOfServer) {
+                            AppData.syncType = SyncType.Server
+                        }
+                        if (value == SyncType.syncOfCacheFile) {
+                            AppData.syncType = SyncType.CacheFile
+                        }
+                    }
                 }
             }
         }
@@ -60,10 +70,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_sync) {
+            val fromServer = AppData.syncType == SyncType.Server
             dialog(
-                message = "是否从服务器同步?",
+                message = "是否从${if (fromServer) "服务器" else "缓存文件"}同步?",
                 positive = {
-                    viewmodel.sync()
+                    viewmodel.sync(fromServer)
                 }
             )
         }

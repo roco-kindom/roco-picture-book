@@ -2,8 +2,8 @@
 <resources>
 
     <string-array name="sync_type">
-        <item>官网数据库</item>
-        <item>缓存数据库</item>
+        <item>@string/sync_from_official_server</item>
+        <item>@string/sync_from_cache_file</item>
     </string-array>
 
     <string-array name="sync_type_values">

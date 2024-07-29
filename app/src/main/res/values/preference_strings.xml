@@ -10,6 +10,8 @@
 
     <string name="title_sync_type">同步方式</string>
     <string name="title_dialog_choose_sync_type">选择同步方式</string>
+    <string name="sync_from_official_server">官网数据库</string>
+    <string name="sync_from_cache_file">缓存数据库</string>
     <string name="title_first_sync_type">优先同步方式</string>
     <string name="title_last_sync_time">上次同步时间</string>
 
