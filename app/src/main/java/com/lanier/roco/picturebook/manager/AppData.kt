@@ -9,6 +9,8 @@ object AppData {
 
     const val spiritIconUrl = "https://res.17roco.qq.com/res/combat/icons/"
 
+    var syncType : SyncType = SyncType.CacheFile
+
     fun loadSpiritAvatar(imageView: ImageView, src: String) {
         imageView.load(spiritIconUrl + src)
     }

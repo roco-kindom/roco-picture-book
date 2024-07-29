@@ -1,16 +1,20 @@
 package com.lanier.roco.picturebook.feature.main
 
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.ext.launchSafe
+import com.lanier.roco.picturebook.feature.setting.SettingsActivity
 import com.lanier.roco.picturebook.manager.SyncAction
 import com.lanier.roco.picturebook.widget.CommonLoading
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
@@ -36,6 +40,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val onSharedPreferencesChangeListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            key?.let {
+                if (it == getString(R.string.key_sync_type)) {
+                    println(">>>> value = ${sharedPreferences.getString(key, "")}")
+                }
+            }
+        }
+
     private val rv by lazy {
         findViewById<RecyclerView>(R.id.recyclerview)
     }
@@ -54,6 +67,10 @@ class MainActivity : AppCompatActivity() {
                 }
             )
         }
+        if (item.itemId == R.id.menu_settings) {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
         return true
     }
 
@@ -64,6 +81,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         rv.adapter = mAdapter
+
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .registerOnSharedPreferenceChangeListener(onSharedPreferencesChangeListener)
 
         launchSafe {
             viewmodel.spirits.observe(this@MainActivity) {
@@ -93,6 +113,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .unregisterOnSharedPreferenceChangeListener(onSharedPreferencesChangeListener)
     }
 
     private fun dialog(
