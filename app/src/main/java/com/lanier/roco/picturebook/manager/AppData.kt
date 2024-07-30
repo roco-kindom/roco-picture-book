@@ -18,4 +18,11 @@ object AppData {
     fun loadProperty(imageView: ImageView, property: String) {
         imageView.load("$propertyIconUrl$property.png")
     }
+
+    object SPData {
+
+        private const val SP_KEY_SYNC_TIME = "sync_time"
+
+        var syncTime : Long by SPDelegate(SP_KEY_SYNC_TIME, 0L)
+    }
 }

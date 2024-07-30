@@ -8,6 +8,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.lanier.roco.picturebook.R
+import com.lanier.roco.picturebook.ext.toFormattedString
 import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.manager.SyncType
 
@@ -20,6 +21,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSyncTypePreference()
+        initSyncTime()
         initAppVersion()
     }
 
@@ -46,6 +48,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 } else {
                     getString(R.string.sync_from_cache_file)
                 }
+        }
+    }
+
+    private fun initSyncTime() {
+        val syncTimePreference = preferenceScreen
+            .findPreference<Preference>(getString(R.string.key_last_sync_time))
+        syncTimePreference?.let {
+            val lastTime = AppData.SPData.syncTime
+            it.summary = if (lastTime <= 0L) "--" else lastTime.toFormattedString("yyyy/MM/dd HH:mm:ss")
         }
     }
 

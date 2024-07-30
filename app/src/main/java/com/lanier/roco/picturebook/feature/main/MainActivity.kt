@@ -116,6 +116,7 @@ class MainActivity : AppCompatActivity() {
                         dismissLoading()
                         if (it.success) {
                             toast("同步完成")
+                            AppData.SPData.syncTime = System.currentTimeMillis()
                             viewmodel.load(true)
                         } else {
                             dialog(it.thr?.message?:"Unknown Error", cancelable = false)
