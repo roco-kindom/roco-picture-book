@@ -32,12 +32,20 @@ class SettingsFragment : PreferenceFragmentCompat() {
             it.setOnPreferenceChangeListener { preference, newValue  ->
                 if (preference.key == getString(R.string.key_sync_type)) {
                     (newValue as? String)?.let {
-                        preference.summary =
-                            if (newValue == SyncType.Server.type) {
-                                getString(R.string.sync_from_official_server)
-                            } else {
-                                getString(R.string.sync_from_cache_file)
+                        when (newValue) {
+                            SyncType.syncOfServer -> {
+                                AppData.syncType = SyncType.Server
+                                preference.summary = getString(R.string.sync_from_official_server)
                             }
+                            SyncType.syncOfCacheFile -> {
+                                AppData.syncType = SyncType.CacheFile
+                                preference.summary = getString(R.string.sync_from_cache_file)
+                            }
+                            else -> {
+                                AppData.syncType = SyncType.CacheFile
+                                preference.summary = getString(R.string.sync_from_cache_file)
+                            }
+                        }
                     }
                 }
                 return@setOnPreferenceChangeListener true

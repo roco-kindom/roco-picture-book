@@ -43,23 +43,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val onSharedPreferencesChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-            key?.let {
-                if (it == getString(R.string.key_sync_type)) {
-                    val value = sharedPreferences.getString(key, "")
-                    if (value.isNullOrEmpty().not()) {
-                        if (value == SyncType.syncOfServer) {
-                            AppData.syncType = SyncType.Server
-                        }
-                        if (value == SyncType.syncOfCacheFile) {
-                            AppData.syncType = SyncType.CacheFile
-                        }
-                    }
-                }
-            }
-        }
-
     private val rv by lazy {
         findViewById<RecyclerView>(R.id.recyclerview)
     }
@@ -96,13 +79,12 @@ class MainActivity : AppCompatActivity() {
         rv.adapter = mAdapter
 
         val defPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        defPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferencesChangeListener)
-        val defType = defPreferences.getString(getString(R.string.key_sync_type), "1")
+        val defType = defPreferences.getString(getString(R.string.key_sync_type), "2") // def load from cache file
         AppData.syncType = when (defType) {
-            getString(R.string.sync_from_official_server_value) -> {
+            SyncType.syncOfServer -> {
                 SyncType.Server
             }
-            getString(R.string.sync_from_cache_file_value) -> {
+            SyncType.syncOfCacheFile -> {
                 SyncType.CacheFile
             }
             else -> {
@@ -140,12 +122,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        PreferenceManager.getDefaultSharedPreferences(this)
-            .unregisterOnSharedPreferenceChangeListener(onSharedPreferencesChangeListener)
     }
 
     private fun dialog(
