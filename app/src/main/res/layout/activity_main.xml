@@ -19,6 +19,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
+        android:padding="8dp"
         tools:listitem="@layout/item_spirit"
         app:spanCount="3"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
