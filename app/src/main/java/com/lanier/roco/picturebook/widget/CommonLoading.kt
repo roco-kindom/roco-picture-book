@@ -16,14 +16,18 @@ class CommonLoading : DialogFragment() {
 
     companion object {
 
-        fun newInstance(): CommonLoading {
-            val args = Bundle()
+        fun newInstance(cancelable: Boolean = true): CommonLoading {
+            val args = Bundle().apply {
+                putBoolean("cancelable", cancelable)
+            }
 
             val fragment = CommonLoading()
             fragment.arguments = args
             return fragment
         }
     }
+
+    private val cancelable by lazy { arguments?.getBoolean("cancelable", true)?: true }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +39,7 @@ class CommonLoading : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        isCancelable = cancelable
         (view.parent as? View)?.setBackgroundColor(Color.TRANSPARENT)
         dialog?.window?.decorView?.setBackgroundColor(Color.TRANSPARENT)
     }

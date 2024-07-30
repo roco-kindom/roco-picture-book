@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.ext.launchSafe
+import com.lanier.roco.picturebook.ext.toast
 import com.lanier.roco.picturebook.feature.setting.SettingsActivity
 import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.manager.SyncAction
@@ -73,6 +74,7 @@ class MainActivity : AppCompatActivity() {
             val fromServer = AppData.syncType == SyncType.Server
             dialog(
                 message = "是否从${if (fromServer) "服务器" else "缓存文件"}同步?",
+                negativeText = "取消",
                 positive = {
                     viewmodel.sync(fromServer)
                 }
@@ -113,13 +115,14 @@ class MainActivity : AppCompatActivity() {
                     is SyncAction.Completed -> {
                         dismissLoading()
                         if (it.success) {
+                            toast("同步完成")
                             viewmodel.load(true)
                         } else {
-                            dialog(it.thr?.message?:"Unknown Error")
+                            dialog(it.thr?.message?:"Unknown Error", cancelable = false)
                         }
                     }
                     SyncAction.Loading -> {
-                        showLoading()
+                        showLoading(false)
                     }
                 }
             }
@@ -134,6 +137,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun dialog(
         message: String,
+        cancelable: Boolean = true,
+        negativeText: String? = null,
         positive: (() -> Unit)? = null,
         negative: (() -> Unit)? = null,
     ) {
@@ -147,17 +152,20 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
         }
-        AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this)
             .setTitle("提示")
             .setMessage(message)
+            .setCancelable(cancelable)
             .setPositiveButton("确定", onClickListener)
-            .setNegativeButton("取消", onClickListener)
-            .show()
+        negativeText?.let {
+            builder.setNegativeButton(it, onClickListener)
+        }
+        builder.show()
     }
 
-    private fun showLoading() {
+    private fun showLoading(cancelable: Boolean = true) {
         loadingDialog?.dismiss()
-        loadingDialog = CommonLoading.newInstance()
+        loadingDialog = CommonLoading.newInstance(cancelable)
         loadingDialog?.show(supportFragmentManager, CommonLoading::class.java.simpleName)
     }
 

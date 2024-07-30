@@ -105,6 +105,7 @@ object DbSyncManager {
         val file = File(cachePath)
         if (file.exists().not()) {
             onCompleted.invoke(false, Throwable("无法从缓存文件同步, 因为没有缓存文件"))
+            return
         }
         withContext(Dispatchers.IO) {
             val content = file.readText()
