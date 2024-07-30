@@ -95,8 +95,20 @@ class MainActivity : AppCompatActivity() {
 
         rv.adapter = mAdapter
 
-        PreferenceManager.getDefaultSharedPreferences(this)
-            .registerOnSharedPreferenceChangeListener(onSharedPreferencesChangeListener)
+        val defPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        defPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferencesChangeListener)
+        val defType = defPreferences.getString(getString(R.string.key_sync_type), "1")
+        AppData.syncType = when (defType) {
+            getString(R.string.sync_from_official_server_value) -> {
+                SyncType.Server
+            }
+            getString(R.string.sync_from_cache_file_value) -> {
+                SyncType.CacheFile
+            }
+            else -> {
+                SyncType.CacheFile
+            }
+        }
 
         launchSafe {
             viewmodel.spirits.observe(this@MainActivity) {

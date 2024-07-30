@@ -7,7 +7,7 @@
     </string-array>
 
     <string-array name="sync_type_values">
-        <item>1</item>
-        <item>2</item>
+        <item>@string/sync_from_official_server_value</item>
+        <item>@string/sync_from_cache_file_value</item>
     </string-array>
 </resources>
