@@ -10,6 +10,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        app:title="@string/title_app_name"
         app:menu="@menu/main_item"
         app:titleTextColor="@color/white"
         android:background="@color/design_default_color_primary"

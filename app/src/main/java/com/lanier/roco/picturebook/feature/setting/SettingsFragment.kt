@@ -1,8 +1,11 @@
 package com.lanier.roco.picturebook.feature.setting
 
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.preference.ListPreference
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.manager.AppData
@@ -17,6 +20,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSyncTypePreference()
+        initAppVersion()
     }
 
     private fun initSyncTypePreference() {
@@ -42,6 +46,20 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 } else {
                     getString(R.string.sync_from_cache_file)
                 }
+        }
+    }
+
+    private fun initAppVersion() {
+        val versionPreference = preferenceScreen
+            .findPreference<Preference>(getString(R.string.key_sundry_version))
+        versionPreference?.let {
+            context?.let { mContext ->
+                it.summary = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    mContext.packageManager.getPackageInfo(mContext.packageName, PackageManager.PackageInfoFlags.of(0)).versionName
+                } else {
+                    mContext.packageManager.getPackageInfo(mContext.packageName, 0).versionName
+                }
+            }
         }
     }
 }
