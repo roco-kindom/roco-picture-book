@@ -2,13 +2,13 @@ package com.lanier.roco.picturebook.feature.main
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lanier.roco.picturebook.R
@@ -20,6 +20,7 @@ import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.manager.SyncAction
 import com.lanier.roco.picturebook.manager.SyncType
 import com.lanier.roco.picturebook.widget.CommonLoading
+import com.lanier.roco.picturebook.widget.rv.EqualDivider
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
 
@@ -77,6 +78,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         rv.adapter = mAdapter
+        val divider = ContextCompat.getDrawable(this, R.drawable.equal_divider)
+        rv.addItemDecoration(EqualDivider(divider!!, 3))
 
         val defPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val defType = defPreferences.getString(getString(R.string.key_sync_type), "2") // def load from cache file
