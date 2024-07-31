@@ -8,12 +8,11 @@
     android:layout_height="match_parent"
     tools:context=".feature.main.MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         app:title="@string/title_app_name"
         app:menu="@menu/main_item"
-        app:titleTextColor="@color/white"
-        android:background="@color/design_default_color_primary"
+        app:titleTextColor="@color/dimo_md_theme_primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
