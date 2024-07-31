@@ -1,5 +1,7 @@
 package com.lanier.roco.picturebook.database.entity
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -42,4 +44,90 @@ data class Spirit(
     @ColumnInfo(name = "src") val src: String,
     @ColumnInfo(name = "state") val state: String,
     @ColumnInfo(name = "catch_rate") val catchRate: String,
-)
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(id)
+        parcel.writeString(name)
+        parcel.writeString(iconSrc)
+        parcel.writeString(interest)
+        parcel.writeString(color)
+        parcel.writeString(height)
+        parcel.writeString(weight)
+        parcel.writeString(group)
+        parcel.writeString(firstID)
+        parcel.writeString(getForm)
+        parcel.writeString(description)
+        parcel.writeString(sm)
+        parcel.writeString(wg)
+        parcel.writeString(fy)
+        parcel.writeString(mg)
+        parcel.writeString(mk)
+        parcel.writeString(sd)
+        parcel.writeString(evolutionFormID)
+        parcel.writeString(evolutionToIDs)
+        parcel.writeString(endTime)
+        parcel.writeString(expType)
+        parcel.writeString(property)
+        parcel.writeString(habitat)
+        parcel.writeString(isInBook)
+        parcel.writeString(mType)
+        parcel.writeString(mspeed)
+        parcel.writeString(previewSrc)
+        parcel.writeString(propoLevel)
+        parcel.writeString(skinNum)
+        parcel.writeString(src)
+        parcel.writeString(state)
+        parcel.writeString(catchRate)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Spirit> {
+        override fun createFromParcel(parcel: Parcel): Spirit {
+            return Spirit(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Spirit?> {
+            return arrayOfNulls(size)
+        }
+    }
+
+}
