@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="8dp"
+    android:background="@drawable/shape_background_corner_top_8">
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivAvatar"
+        android:layout_marginTop="8dp"
+        app:strokeColor="@color/dimo_md_theme_primary"
+        app:strokeWidth="2dp"
+        android:padding="2dp"
+        app:shapeAppearance="@style/ShapeImageView12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="66dp"
+        android:layout_height="66dp"/>
+
+    <TextView
+        android:id="@+id/tvID"
+        android:layout_marginStart="12dp"
+        app:layout_constraintTop_toTopOf="@+id/ivAvatar"
+        app:layout_constraintStart_toEndOf="@+id/ivAvatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvID"
+        app:layout_constraintStart_toStartOf="@+id/tvID"
+        app:layout_constraintTop_toBottomOf="@+id/tvID"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

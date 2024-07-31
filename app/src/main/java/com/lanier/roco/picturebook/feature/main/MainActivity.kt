@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         SpiritAdapter().apply {
             onItemClickListener = object : OnItemClickListener<Spirit> {
                 override fun onItemClick(t: Spirit, position: Int) {
+                    SpiritShowPopup.show(spirit = t, supportFragmentManager)
                 }
             }
 
