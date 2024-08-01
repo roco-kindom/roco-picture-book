@@ -3,4 +3,13 @@
 
     <string name="title_app_name">Roco图鉴</string>
     <string name="title_settings">设置</string>
+
+    <string name="p_id">编号: %s</string>
+    <string name="p_interest">兴趣: %s</string>
+    <string name="p_height">身高: %s</string>
+    <string name="p_weight">体重: %s</string>
+    <string name="p_color">颜色: %s</string>
+    <string name="p_exp_type">经验类型: %s</string>
+    <string name="p_egg_group">蛋组: %s</string>
+    <string name="p_intro">简介: %s</string>
 </resources>
