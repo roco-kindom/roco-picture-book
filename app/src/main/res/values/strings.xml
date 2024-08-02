@@ -6,14 +6,14 @@
 
     <string name="single_str">%s</string>
 
-    <string name="p_id">编号: %s</string>
-    <string name="p_interest">兴趣: %s</string>
-    <string name="p_height">身高: %s</string>
-    <string name="p_weight">体重: %s</string>
-    <string name="p_color">颜色: %s</string>
-    <string name="p_exp_type">经验类型: %s</string>
-    <string name="p_egg_group">蛋组: %s</string>
-    <string name="p_intro">简介: %s</string>
+    <string name="p_id">编号:&#160;&#160;%s</string>
+    <string name="p_interest">兴趣:&#160;&#160;%s</string>
+    <string name="p_height">身高:&#160;&#160;%s</string>
+    <string name="p_weight">体重:&#160;&#160;%s</string>
+    <string name="p_color">颜色:&#160;&#160;%s</string>
+    <string name="p_exp_type">经验:&#160;&#160;%s</string>
+    <string name="p_egg_group">蛋组:&#160;&#160;%s</string>
+    <string name="p_intro">简介:&#160;&#160;</string>
 
     <string name="p_ability_value_def_value">%s/%s</string>
 </resources>
