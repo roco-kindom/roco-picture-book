@@ -17,7 +17,8 @@ class ViewSpiritAbility @JvmOverloads constructor(
     defStyleAttr: Int = 0,
 ) : RelativeLayout(context, attributeSet, defStyleAttr) {
 
-    private val binding = ViewSpiritAbilityValueBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding =
+        ViewSpiritAbilityValueBinding.inflate(LayoutInflater.from(context), this, true)
 
     fun modifyProgressColor(newColor: Color) {
         modifyProgressColor(newColor.toArgb())
@@ -33,8 +34,11 @@ class ViewSpiritAbility @JvmOverloads constructor(
     fun bind(value: Int, defValue: Int = 200) {
         context?.let {
             binding.apply {
-                tvAbilityValue.text = it.getString(R.string.p_ability_value_def_value, "$value", "$defValue")
-                pbAbility.progress = value
+                post {
+//                    tvAbilityValue.text = it.getString(R.string.p_ability_value_def_value, "$value", "$defValue")
+                    tvAbilityValue.text = it.getString(R.string.single_str, "$value")
+                    pbAbility.progress = value
+                }
             }
         }
     }

@@ -10,6 +10,7 @@ import android.view.View
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import kotlinx.coroutines.delay
+import kotlin.math.max
 
 class AbilityValueProgressBar @JvmOverloads constructor(
     context: Context,
@@ -41,9 +42,16 @@ class AbilityValueProgressBar @JvmOverloads constructor(
             animateProgress(value)
         }
 
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        progressPaint.strokeWidth = max(h / 2f, 24f)
+        progressPaint.style = Paint.Style.STROKE
+        progressPaint.strokeCap = Paint.Cap.ROUND
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawLine(0f, height / 2f, width.toFloat(), height / 2f, backgroundPaint)
+//        canvas.drawLine(0f, height / 2f, width.toFloat(), height / 2f, backgroundPaint)
         canvas.drawLine(0f, height / 2f, mProgress, height / 2f, progressPaint)
     }
 
@@ -63,17 +71,14 @@ class AbilityValueProgressBar @JvmOverloads constructor(
 
     private fun animateProgress(toProgress: Int) {
         animator?.cancel()
-        animator = ValueAnimator.ofFloat(mProgress, (toProgress * 1f / maxProgress) * width).apply {
+        val target = (toProgress * 1f / maxProgress) * width
+        animator = ValueAnimator.ofFloat(mProgress, target).apply {
             duration = 1000
             addUpdateListener { animation ->
                 mProgress = animation.animatedValue as Float
                 invalidate()
             }
-//            doOnEnd {
-//                mProgress = (toProgress * 1f / maxProgress) * width
-//                invalidate()
-//            }
-            postDelayed({ start() }, 200)
+            postDelayed({ start() }, 300)
         }
     }
 }

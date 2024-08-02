@@ -4,6 +4,8 @@
     <string name="title_app_name">Roco图鉴</string>
     <string name="title_settings">设置</string>
 
+    <string name="single_str">%s</string>
+
     <string name="p_id">编号: %s</string>
     <string name="p_interest">兴趣: %s</string>
     <string name="p_height">身高: %s</string>
