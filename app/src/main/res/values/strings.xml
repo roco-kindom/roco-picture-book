@@ -12,4 +12,6 @@
     <string name="p_exp_type">经验类型: %s</string>
     <string name="p_egg_group">蛋组: %s</string>
     <string name="p_intro">简介: %s</string>
+
+    <string name="p_ability_value_def_value">%s/%s</string>
 </resources>

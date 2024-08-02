@@ -78,6 +78,14 @@ class SpiritShowPopup : BottomSheetDialogFragment() {
                 binding.ivProperty2.gone()
             }
             binding.spirit = it
+            binding.vAbilityHP.apply {
+                modifyProgressColor(Color.parseColor("#FF0000"))
+                bind(it.sm.toInt())
+            }
+            binding.vAbilityAttack.apply {
+                modifyProgressColor(Color.parseColor("#00FF00"))
+                bind(it.wg.toInt())
+            }
         }
     }
 

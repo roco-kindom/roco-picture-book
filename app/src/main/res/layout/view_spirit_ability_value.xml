@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivAbilityPic"
+            android:layout_centerVertical="true"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+
+        <TextView
+            android:id="@+id/tvAbilityValue"
+            tools:text="999/999"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content" />
+
+        <com.lanier.roco.picturebook.widget.AbilityValueProgressBar
+            android:id="@+id/pbAbility"
+            android:layout_toEndOf="@+id/ivAbilityPic"
+            android:layout_toStartOf="@+id/tvAbilityValue"
+            android:layout_width="match_parent"
+            android:layout_height="32dp" />
+    </RelativeLayout>
+</layout>
