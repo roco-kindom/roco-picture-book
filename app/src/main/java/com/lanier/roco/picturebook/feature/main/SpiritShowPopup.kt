@@ -77,15 +77,40 @@ class SpiritShowPopup : BottomSheetDialogFragment() {
                 AppData.loadProperty(binding.ivProperty1, it.property)
                 binding.ivProperty2.gone()
             }
+            bindAbility(it)
             binding.spirit = it
-            binding.vAbilityHP.apply {
-                modifyProgressColor(Color.parseColor("#FF0000"))
-                bind(it.sm.toInt())
-            }
-            binding.vAbilityAttack.apply {
-                modifyProgressColor(Color.parseColor("#00FF00"))
-                bind(it.wg.toInt())
-            }
+        }
+    }
+
+    private fun bindAbility(spirit: Spirit) {
+        binding.vAbilityHP.apply {
+            modifyProgressColor(Color.parseColor("#99E74738"))
+            bind(R.drawable.ic_ability_hp, spirit.sm.toInt())
+        }
+
+        binding.vAbilityAttack.apply {
+            modifyProgressColor(Color.parseColor("#99AC9B96"))
+            bind(R.drawable.ic_ability_wg, spirit.wg.toInt())
+        }
+
+        binding.vAbilityDefense.apply {
+            modifyProgressColor(Color.parseColor("#9992BDBD"))
+            bind(R.drawable.ic_ability_fy, spirit.fy.toInt())
+        }
+
+        binding.vAbilityMagicAttack.apply {
+            modifyProgressColor(Color.parseColor("#995BACCF"))
+            bind(R.drawable.ic_ability_mg, spirit.mg.toInt())
+        }
+
+        binding.vAbilityMagicDefense.apply {
+            modifyProgressColor(Color.parseColor("#99518AC2"))
+            bind(R.drawable.ic_ability_mk, spirit.mk.toInt())
+        }
+
+        binding.vAbilitySpeed.apply {
+            modifyProgressColor(Color.parseColor("#99B5E1FE"))
+            bind(R.drawable.ic_ability_sd, spirit.sd.toInt())
         }
     }
 

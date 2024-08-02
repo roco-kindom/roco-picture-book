@@ -7,9 +7,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.animation.doOnEnd
-import androidx.core.animation.doOnStart
-import kotlinx.coroutines.delay
 import kotlin.math.max
 
 class AbilityValueProgressBar @JvmOverloads constructor(
@@ -80,5 +77,11 @@ class AbilityValueProgressBar @JvmOverloads constructor(
             }
             postDelayed({ start() }, 300)
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animator?.cancel()
+        animator = null
     }
 }

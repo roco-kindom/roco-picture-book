@@ -13,9 +13,10 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivAbilityPic"
+            tools:src="@drawable/ic_ability_hp"
             android:layout_centerVertical="true"
-            android:layout_width="24dp"
-            android:layout_height="24dp" />
+            android:layout_width="56dp"
+            android:layout_height="18dp" />
 
         <TextView
             android:id="@+id/tvAbilityValue"

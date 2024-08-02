@@ -5,10 +5,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.RelativeLayout
+import androidx.annotation.DrawableRes
 import com.lanier.roco.picturebook.R
-import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.databinding.ViewSpiritAbilityValueBinding
 
 class ViewSpiritAbility @JvmOverloads constructor(
@@ -31,11 +30,12 @@ class ViewSpiritAbility @JvmOverloads constructor(
         binding.pbAbility.modifyProgressPaint(paint, false)
     }
 
-    fun bind(value: Int, defValue: Int = 200) {
+    fun bind(@DrawableRes iconDrawableId: Int, value: Int, defValue: Int = 200) {
         context?.let {
             binding.apply {
                 post {
 //                    tvAbilityValue.text = it.getString(R.string.p_ability_value_def_value, "$value", "$defValue")
+                    ivAbilityPic.setImageResource(iconDrawableId)
                     tvAbilityValue.text = it.getString(R.string.single_str, "$value")
                     pbAbility.progress = value
                 }

@@ -156,8 +156,44 @@
 
         <com.lanier.roco.picturebook.widget.ViewSpiritAbility
             android:id="@+id/vAbilityAttack"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/vAbilityHP"
+            app:layout_constraintStart_toStartOf="@+id/ivAvatar"
+            app:layout_constraintEnd_toEndOf="@+id/tvDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <com.lanier.roco.picturebook.widget.ViewSpiritAbility
+            android:id="@+id/vAbilityDefense"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/vAbilityAttack"
+            app:layout_constraintStart_toStartOf="@+id/ivAvatar"
+            app:layout_constraintEnd_toEndOf="@+id/tvDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <com.lanier.roco.picturebook.widget.ViewSpiritAbility
+            android:id="@+id/vAbilityMagicAttack"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/vAbilityDefense"
+            app:layout_constraintStart_toStartOf="@+id/ivAvatar"
+            app:layout_constraintEnd_toEndOf="@+id/tvDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <com.lanier.roco.picturebook.widget.ViewSpiritAbility
+            android:id="@+id/vAbilityMagicDefense"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/vAbilityMagicAttack"
+            app:layout_constraintStart_toStartOf="@+id/ivAvatar"
+            app:layout_constraintEnd_toEndOf="@+id/tvDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <com.lanier.roco.picturebook.widget.ViewSpiritAbility
+            android:id="@+id/vAbilitySpeed"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/vAbilityMagicDefense"
             app:layout_constraintStart_toStartOf="@+id/ivAvatar"
             app:layout_constraintEnd_toEndOf="@+id/tvDesc"
             android:layout_width="0dp"
