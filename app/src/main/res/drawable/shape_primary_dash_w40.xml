@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="line">
+
+    <stroke
+        android:color="@color/dimo_md_theme_primary"
+        android:width="0.2dp"
+        android:dashWidth="40dp"
+        android:dashGap="1dp"/>
+</shape>

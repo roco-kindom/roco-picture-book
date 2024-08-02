@@ -22,6 +22,7 @@
             android:id="@+id/tvAbilityValue"
             tools:text="999/999"
             android:textSize="12sp"
+            android:textStyle="bold"
             android:textColor="@color/dimo_md_theme_primary"
             android:gravity="center"
             android:layout_alignParentEnd="true"
