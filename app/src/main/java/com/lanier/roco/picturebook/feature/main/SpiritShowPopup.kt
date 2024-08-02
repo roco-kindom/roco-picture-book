@@ -1,13 +1,18 @@
 package com.lanier.roco.picturebook.feature.main
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.databinding.PopupSpiritDetailsBinding
+import com.lanier.roco.picturebook.ext.gone
+import com.lanier.roco.picturebook.ext.visible
 import com.lanier.roco.picturebook.manager.AppData
 
 class SpiritShowPopup : BottomSheetDialogFragment() {
@@ -46,8 +51,16 @@ class SpiritShowPopup : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         spirit?.let {
             AppData.loadSpiritAvatar(binding.ivAvatar, it.iconSrc)
-            binding.tvID.text = it.id
-            binding.tvName.text = it.name
+            val properties = it.property.split(",")
+            if (properties.size == 2) {
+                AppData.loadProperty(binding.ivProperty1, properties[0])
+                AppData.loadProperty(binding.ivProperty2, properties[1])
+                binding.ivProperty2.visible()
+            } else {
+                AppData.loadProperty(binding.ivProperty1, it.property)
+                binding.ivProperty2.gone()
+            }
+            binding.spirit = it
         }
     }
 }
