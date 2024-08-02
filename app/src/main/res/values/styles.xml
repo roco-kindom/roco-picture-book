@@ -5,4 +5,9 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">12dp</item>
     </style>
+
+    <style name="DialogFullScreenTransparentStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">#00000000</item>
+    </style>
 </resources>

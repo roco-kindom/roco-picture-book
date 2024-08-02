@@ -1,12 +1,15 @@
 package com.lanier.roco.picturebook.feature.main
 
+import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.TranslateAnimation
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.database.entity.Spirit
@@ -39,12 +42,26 @@ class SpiritShowPopup : BottomSheetDialogFragment() {
 
     private val binding by lazy { PopupSpiritDetailsBinding.inflate(layoutInflater) }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_TITLE, R.style.DialogFullScreenTransparentStyle)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return binding.root
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.setOnShowListener {
+            val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.let { enterAnim(it) }
+        }
+        return dialog
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,5 +79,15 @@ class SpiritShowPopup : BottomSheetDialogFragment() {
             }
             binding.spirit = it
         }
+    }
+
+    private fun enterAnim(view: View) {
+        val animation = TranslateAnimation(
+            0f, 0f, view.height.toFloat(), 0f
+        ).apply {
+            duration = 150 // 动画持续时间
+            fillAfter = true
+        }
+        view.startAnimation(animation)
     }
 }

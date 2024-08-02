@@ -30,6 +30,7 @@
         <TextView
             android:id="@+id/tvName"
             android:gravity="center"
+            android:textStyle="bold"
             android:text="@{spirit.name}"
             android:textSize="12sp"
             android:maxLines="2"
