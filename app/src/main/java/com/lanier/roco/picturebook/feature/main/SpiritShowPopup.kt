@@ -2,7 +2,6 @@ package com.lanier.roco.picturebook.feature.main
 
 import android.app.Dialog
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -78,6 +77,7 @@ class SpiritShowPopup : BottomSheetDialogFragment() {
                 binding.ivProperty2.gone()
             }
             bindAbility(it)
+            setEggGroup(it.group)
             binding.spirit = it
         }
     }
@@ -112,6 +112,23 @@ class SpiritShowPopup : BottomSheetDialogFragment() {
             modifyProgressColor(Color.parseColor("#99B5E1FE"))
             bind(R.drawable.ic_ability_sd, spirit.sd.toInt())
         }
+    }
+
+    private fun setEggGroup(groupId: String) {
+        binding.ivEggGroup.setImageResource(
+            when (groupId) {
+                "1" -> R.drawable.ic_egg_group_1
+                "2" -> R.drawable.ic_egg_group_2
+                "4" -> R.drawable.ic_egg_group_4
+                "10" -> R.drawable.ic_egg_group_10
+                "12" -> R.drawable.ic_egg_group_12
+                "13" -> R.drawable.ic_egg_group_13
+                "15" -> R.drawable.ic_egg_group_15
+                "21" -> R.drawable.ic_egg_group_21
+                "29" -> R.drawable.ic_egg_group_29
+                else -> R.drawable.ic_egg_group_32
+            }
+        )
     }
 
     private fun enterAnim(view: View) {

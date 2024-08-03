@@ -6,7 +6,7 @@
 
     <string name="single_str">%s</string>
 
-    <string name="p_id">编号:&#160;&#160;%s</string>
+    <string name="p_id">序号:&#160;&#160;%s</string>
     <string name="p_interest">兴趣:&#160;&#160;%s</string>
     <string name="p_height">身高:&#160;&#160;%s</string>
     <string name="p_weight">体重:&#160;&#160;%s</string>
