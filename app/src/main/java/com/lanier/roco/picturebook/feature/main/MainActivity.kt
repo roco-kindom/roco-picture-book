@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -18,6 +19,7 @@ import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.ext.launchSafe
 import com.lanier.roco.picturebook.ext.toast
+import com.lanier.roco.picturebook.feature.search.SearchActivity
 import com.lanier.roco.picturebook.feature.setting.SettingsActivity
 import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.manager.SyncAction
@@ -90,6 +92,11 @@ class MainActivity : AppCompatActivity() {
         rv.adapter = mAdapter
         val divider = ContextCompat.getDrawable(this, R.drawable.equal_divider)
         rv.addItemDecoration(EqualDivider(divider!!, 3))
+
+        findViewById<TextView>(R.id.tvSearch).setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
 
         val defPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val defType = defPreferences.getString(getString(R.string.key_sync_type), "2") // def load from cache file
