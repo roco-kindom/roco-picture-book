@@ -17,4 +17,10 @@
     <string name="p_intro">简介:&#160;&#160;</string>
 
     <string name="p_ability_value_def_value">%s/%s</string>
+
+    <string name="spirit_all">全部</string>
+    <string name="spirit_no">编号</string>
+    <string name="spirit_name">名字</string>
+    <string name="spirit_group">组</string>
+    <string name="spirit_property">属性</string>
 </resources>

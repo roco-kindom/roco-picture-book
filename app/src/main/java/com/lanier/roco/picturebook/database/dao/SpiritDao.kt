@@ -61,4 +61,19 @@ interface SpiritDao {
 
     @Query("select * from spirit order by cast(id as integer) desc limit :limit offset :offset")
     fun getSpiritsByPage(offset: Int, limit: Int = 20) : List<Spirit>
+
+    @Query("select * from spirit where(cast(id as TEXT) like '%'||:searchText||'%' or name like '%'||:searchText||'%' or group_id like '%'||:searchText||'%' or property like '%'||:searchText||'%') order by cast(id as integer) desc limit :limit offset :offset")
+    fun getSpiritsSearchByAllPage(searchText: String, offset: Int, limit: Int = 20) : List<Spirit>
+
+    @Query("select * from spirit where cast(id as TEXT) like '%'||:searchText||'%' order by cast(id as integer) desc limit :limit offset :offset")
+    fun getSpiritsSearchByIdPage(searchText: String, offset: Int, limit: Int = 20) : List<Spirit>
+
+    @Query("select * from spirit where name like '%'||:searchText||'%' order by cast(id as integer) desc limit :limit offset :offset")
+    fun getSpiritsSearchByNamePage(searchText: String, offset: Int, limit: Int = 20) : List<Spirit>
+
+    @Query("select * from spirit where group_id like '%'||:searchText||'%' order by cast(id as integer) desc limit :limit offset :offset")
+    fun getSpiritsSearchByGroupIdPage(searchText: String, offset: Int, limit: Int = 20) : List<Spirit>
+
+    @Query("select * from spirit where property like '%'||:searchText||'%' order by cast(id as integer) desc limit :limit offset :offset")
+    fun getSpiritsSearchByPropertyIdPage(searchText: String, offset: Int, limit: Int = 20) : List<Spirit>
 }

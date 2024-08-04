@@ -16,6 +16,7 @@ class MainViewModel : ViewModel() {
     private val limit = 20
     private var page = 1
     private var lock = Mutex()
+    private var isEnd = false
 
     val spirits = MutableLiveData<Triple<Int, List<Spirit>, Boolean>>()
     val syncAction = MutableLiveData<SyncAction>()
@@ -30,15 +31,18 @@ class MainViewModel : ViewModel() {
     }
 
     fun load(refresh: Boolean = false) {
-        if (lock.isLocked) return
+        if (lock.isLocked || isEnd) return
         launchSafe {
             lock.lock()
-            if (refresh) page = 1
+            if (refresh) {
+                page = 1
+                isEnd = false
+            }
             val list = ioWithData {
                 VioletDatabase.db.spiritDao().getSpiritsByPage(offset = (page - 1) * limit, limit)
             }
             main {
-                val isEnd = list.size < limit
+                isEnd = list.size < limit
                 spirits.value = Triple(page, list, isEnd)
                 if (isEnd.not()) {
                     page++
