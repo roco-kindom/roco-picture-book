@@ -16,7 +16,6 @@ class SearchViewModel : ViewModel() {
     private var page = 1
     private var lock = Mutex()
     private var lastText = ""
-    private var isEnd = false
 
     /**
      * 0 - 全部
@@ -44,7 +43,7 @@ class SearchViewModel : ViewModel() {
         if (lastText != searchText){
             refresh()
         }
-        if (lock.isLocked || isEnd) return
+        if (lock.isLocked) return
         launchSafe {
             lock.lock()
             val list = ioWithData {
@@ -57,7 +56,7 @@ class SearchViewModel : ViewModel() {
                 }
             }
             main {
-                isEnd = list.size < limit
+                val isEnd = list.size < limit
                 spirits.value = Triple(page, list, isEnd)
                 if (isEnd.not()) {
                     page++
@@ -70,6 +69,5 @@ class SearchViewModel : ViewModel() {
 
     private fun refresh(){
         page = 1
-        isEnd = false
     }
 }

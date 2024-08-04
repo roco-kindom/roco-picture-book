@@ -51,7 +51,9 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
                     val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
                     if (totalItemCount <= lastVisibleItem + 1) {
-                        onLoadMoreListener?.onLoadMore()
+                        if (isEnd.not()) {
+                            onLoadMoreListener?.onLoadMore()
+                        }
                     }
                 }
             }
