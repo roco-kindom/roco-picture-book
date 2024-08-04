@@ -7,7 +7,7 @@ import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.ext.ioWithData
 import com.lanier.roco.picturebook.ext.launchSafe
 import com.lanier.roco.picturebook.ext.main
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.lanier.roco.picturebook.manager.AppData
 import kotlinx.coroutines.sync.Mutex
 
 class SearchViewModel : ViewModel() {
@@ -17,57 +17,70 @@ class SearchViewModel : ViewModel() {
     private var lock = Mutex()
     private var lastText = ""
 
-    /**
-     * 0 - 全部
-     * 1 - 序号
-     * 2 - 名称
-     * 3 - 组
-     * 4 - 属性
-     */
-    private var status = MutableLiveData<Int>(0)
+    private var spiritSearchModel = SearchModel()
 
     val spirits = MutableLiveData<Triple<Int, List<Spirit>, Boolean>>()
 
-    fun setStatus(status: Int) {
-        this.status.value = status
-        refresh()
+    fun modifyProperty(property: Int? = null) {
+        val pid = property?.let { sp ->
+            if (AppData.spiritProperties.contains(sp)) sp else -1
+        } ?: -1
+        spiritSearchModel = spiritSearchModel.copy(
+            propertyId = pid
+        )
+    }
+
+    fun modifyGroup(group: Int? = null) {
+        val gid = group?.let { sg ->
+            if (AppData.spiritGroups.contains(sg)) sg else -1
+        } ?: -1
+        spiritSearchModel = spiritSearchModel.copy(
+            groupId = gid
+        )
+    }
+
+    fun research() {
         search(lastText)
     }
 
-    fun search(searchText: String) {
-        if (searchText.isEmpty()){
-            spirits.value = Triple(1, emptyList(), true)
-            lastText = ""
-            return
-        }
-        if (lastText != searchText){
-            refresh()
-        }
+    fun search(input: String) {
+        if (AppData.spiritMaxValidId <= 0) return
         if (lock.isLocked) return
+        if (lastText == input) return
         launchSafe {
             lock.lock()
-            val list = ioWithData {
-                when (status.value){
-                    1 -> VioletDatabase.db.spiritDao().getSpiritsSearchByIdPage(searchText, offset = (page - 1) * limit, limit)
-                    2 -> VioletDatabase.db.spiritDao().getSpiritsSearchByNamePage(searchText, offset = (page - 1) * limit, limit)
-                    3 -> VioletDatabase.db.spiritDao().getSpiritsSearchByGroupIdPage(searchText, offset = (page - 1) * limit, limit)
-                    4 -> VioletDatabase.db.spiritDao().getSpiritsSearchByPropertyIdPage(searchText, offset = (page - 1) * limit, limit)
-                    else-> VioletDatabase.db.spiritDao().getSpiritsSearchByAllPage(searchText, offset = (page - 1) * limit, limit)
+            val gid = if (spiritSearchModel.groupId <= 0) null else spiritSearchModel.groupId.toString()
+            val pid = if (spiritSearchModel.propertyId <= 0) null else spiritSearchModel.propertyId.toString()
+            val dao = VioletDatabase.db.spiritDao()
+            val list = if (input.matches(Regex("\\d+"))) {
+                val id = input.toInt()
+                if (id in 1..AppData.spiritMaxValidId) {
+                    ioWithData { dao.getSpiritsByIdAndOtherFiled(
+                        id = input,
+                        groupId = gid,
+                        propertyId = pid,
+                        offset = (page - 1) * limit,
+                        limit = limit)
+                    }
+                } else{
+                    emptyList()
+                }
+            } else {
+                ioWithData { dao.getSpiritsByNameAndOtherFiled(
+                    name = input,
+                    groupId = gid,
+                    propertyId = pid,
+                    offset = (page - 1) * limit,
+                    limit = limit)
                 }
             }
             main {
                 val isEnd = list.size < limit
                 spirits.value = Triple(page, list, isEnd)
-                if (isEnd.not()) {
-                    page++
-                }
+                if (isEnd.not()) page++
             }
-            lastText = searchText
+            lastText = input
             lock.unlock()
         }
-    }
-
-    private fun refresh(){
-        page = 1
     }
 }

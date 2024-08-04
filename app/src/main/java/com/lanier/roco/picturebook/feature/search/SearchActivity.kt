@@ -1,8 +1,11 @@
 package com.lanier.roco.picturebook.feature.search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,8 +18,10 @@ import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.databinding.ActivitySearchBinding
 import com.lanier.roco.picturebook.ext.launchSafe
+import com.lanier.roco.picturebook.ext.toast
 import com.lanier.roco.picturebook.feature.main.SpiritAdapter
 import com.lanier.roco.picturebook.feature.main.SpiritShowPopup
+import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.widget.rv.EqualDivider
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
@@ -48,8 +53,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_search)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -67,12 +71,15 @@ class SearchActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
+        binding.etSearch.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val inputText = binding.etSearch.text.toString()
+                if (inputText.isEmpty()) return@setOnEditorActionListener true
+                val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(v.windowToken, 0)
 
-        binding.etSearch.addTextChangedListener {
-            text ->
-            run {
-                viewmodel.search(text.toString())
             }
+            return@setOnEditorActionListener true
         }
 
         launchSafe {
@@ -94,13 +101,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.all -> viewmodel.setStatus(0)
-            R.id.id -> viewmodel.setStatus(1)
-            R.id.name -> viewmodel.setStatus(2)
-            R.id.groupId -> viewmodel.setStatus(3)
-            R.id.propertyId -> viewmodel.setStatus(4)
+        if (item.itemId == R.id.menuFilter) {
         }
         return super.onOptionsItemSelected(item)
     }
+
+
 }

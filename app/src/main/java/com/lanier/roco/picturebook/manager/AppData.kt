@@ -2,6 +2,8 @@ package com.lanier.roco.picturebook.manager
 
 import android.widget.ImageView
 import coil.load
+import com.lanier.roco.picturebook.database.entity.Property
+import com.lanier.roco.picturebook.database.entity.SpiritGroup
 
 object AppData {
 
@@ -10,6 +12,10 @@ object AppData {
     const val spiritIconUrl = "https://res.17roco.qq.com/res/combat/icons/"
 
     var syncType : SyncType = SyncType.CacheFile
+
+    var spiritMaxValidId = -1
+    val spiritProperties = mutableMapOf<Int, Property>()
+    val spiritGroups = mutableMapOf<Int, SpiritGroup>()
 
     fun loadSpiritAvatar(imageView: ImageView, src: String) {
         imageView.load(spiritIconUrl + src)

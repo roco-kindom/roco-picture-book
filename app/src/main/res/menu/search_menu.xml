@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/all"
-        android:title="@string/spirit_all"
-        app:showAsAction="never"/>
-    <item android:id="@+id/id"
-        android:title="@string/spirit_no"
-        app:showAsAction="never"/>
-    <item android:id="@+id/name"
-        android:title="@string/spirit_name"
-        app:showAsAction="never"/>
-    <item android:id="@+id/groupId"
-        android:title="@string/spirit_group"
-        app:showAsAction="never"/>
-    <item android:id="@+id/propertyId"
-        android:title="@string/spirit_property"
-        app:showAsAction="never"/>
+    <item android:id="@+id/menuFilter"
+        android:icon="@drawable/baseline_filter_alt_24"
+        app:showAsAction="always"/>
 </menu>

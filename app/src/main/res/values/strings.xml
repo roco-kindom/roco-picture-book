@@ -18,6 +18,8 @@
 
     <string name="p_ability_value_def_value">%s/%s</string>
 
+    <string name="research">重新搜索</string>
+
     <string name="spirit_all">全部</string>
     <string name="spirit_no">编号</string>
     <string name="spirit_name">名字</string>
