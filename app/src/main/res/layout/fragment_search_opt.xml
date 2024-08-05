@@ -69,7 +69,7 @@
                 android:layoutDirection="rtl"
                 android:textSize="12sp"
                 android:textColor="@color/dimo_md_theme_outline"
-                android:text="@string/fuzzy_search_by_name"
+                android:text="@string/fuzzy_search_by_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

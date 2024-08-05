@@ -20,6 +20,7 @@
 
     <string name="research">重新搜索</string>
     <string name="persistent_search_configuration">持久化搜索配置</string>
+    <string name="fuzzy_search_by_id">按序号模糊搜索</string>
     <string name="fuzzy_search_by_name">按名称模糊搜索</string>
 
     <string name="spirit_all">全部</string>
