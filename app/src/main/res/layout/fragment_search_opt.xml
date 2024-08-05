@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,6 +9,7 @@
 
     <ScrollView
         android:orientation="vertical"
+        android:background="@color/dimo_md_theme_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -27,6 +29,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvProperties"
                 android:padding="8dp"
+                tools:listitem="@layout/item_search_opt"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -42,6 +47,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvGroups"
                 android:padding="8dp"
+                tools:listitem="@layout/item_search_opt"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

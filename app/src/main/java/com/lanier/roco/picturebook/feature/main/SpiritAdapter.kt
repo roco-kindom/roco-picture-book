@@ -36,6 +36,11 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     var isEnd = false
 
+    fun emptyData() {
+        isEnd = true
+        notifyDataSetChanged()
+    }
+
     fun addData(list: List<Spirit>) {
         val startIndex = itemCount
         _data.addAll(list)
@@ -108,10 +113,7 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-//        if (_data.size == 0) {
-//            return LOADING_VIEW_TYPE
-//        }
-        if (position == _data.size) {
+        if (position == _data.size || _data.size == 0) {
             return if (isEnd) ITEM_VIEW_END else LOADING_VIEW_TYPE
         }
         return ITEM_VIEW_TYPE

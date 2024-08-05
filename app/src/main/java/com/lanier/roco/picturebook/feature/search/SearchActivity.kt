@@ -2,6 +2,7 @@ package com.lanier.roco.picturebook.feature.search
 
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
@@ -10,18 +11,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.databinding.ActivitySearchBinding
 import com.lanier.roco.picturebook.ext.launchSafe
-import com.lanier.roco.picturebook.ext.toast
 import com.lanier.roco.picturebook.feature.main.SpiritAdapter
 import com.lanier.roco.picturebook.feature.main.SpiritShowPopup
-import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.widget.rv.EqualDivider
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
@@ -44,7 +43,7 @@ class SearchActivity : AppCompatActivity() {
 
             onLoadMoreListener = object : OnLoadMoreListener {
                 override fun onLoadMore() {
-                    viewmodel.search(binding.etSearch.text.toString())
+                    viewmodel.loadMore()
                 }
             }
         }
@@ -64,6 +63,16 @@ class SearchActivity : AppCompatActivity() {
         val divider = ContextCompat.getDrawable(this, R.drawable.equal_divider)
         binding.recyclerview.addItemDecoration(EqualDivider(divider!!, 3))
 
+        val searchFragment = SearchOptFragment.newInstance()
+        searchFragment.onResearchListener = object : SearchOptFragment.OnResearchListener {
+            override fun onResearch() {
+                binding.drawerLayout.closeDrawer(GravityCompat.END)
+            }
+        }
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.flSearchOpt, searchFragment, SearchOptFragment::class.java.simpleName)
+        transaction.commit()
+
         initListener()
     }
 
@@ -73,11 +82,7 @@ class SearchActivity : AppCompatActivity() {
         }
         binding.etSearch.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                val inputText = binding.etSearch.text.toString()
-                if (inputText.isEmpty()) return@setOnEditorActionListener true
-                val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                manager.hideSoftInputFromWindow(v.windowToken, 0)
-
+                search()
             }
             return@setOnEditorActionListener true
         }
@@ -95,6 +100,16 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                binding.drawerLayout.closeDrawer(GravityCompat.END)
+                return true
+            }
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
         return super.onCreateOptionsMenu(menu)
@@ -102,9 +117,15 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menuFilter) {
+            binding.drawerLayout.openDrawer(GravityCompat.END)
         }
         return super.onOptionsItemSelected(item)
     }
 
-
+    private fun search() {
+        val inputText = binding.etSearch.text.toString()
+        val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
+        viewmodel.search(inputText)
+    }
 }

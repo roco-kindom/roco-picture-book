@@ -89,8 +89,9 @@ interface SpiritDao {
         """
         select * from spirit
         where cast(id as TEXT)=:id
-        and (:propertyId is null or '%'||:propertyId||'%')
+        and (:propertyId is null or property like '%'||:propertyId||'%')
         and (:groupId is null or group_id=:groupId)
+        order by cast(id as integer) desc limit :limit offset :offset
     """
     )
     fun getSpiritsByIdAndOtherFiled(id: String, propertyId: String?, groupId: String?, offset: Int, limit: Int = 20): List<Spirit>
@@ -98,9 +99,10 @@ interface SpiritDao {
     @Query(
         """
         select * from spirit
-        where name=:name
-        and (:propertyId is null or '%'||:propertyId||'%')
+        where name like '%'||:name||'%'
+        and (:propertyId is null or property like '%'||:propertyId||'%')
         and (:groupId is null or group_id=:groupId)
+        order by cast(id as integer) desc limit :limit offset :offset
     """
     )
     fun getSpiritsByNameAndOtherFiled(name: String, propertyId: String?, groupId: String?, offset: Int, limit: Int = 20): List<Spirit>

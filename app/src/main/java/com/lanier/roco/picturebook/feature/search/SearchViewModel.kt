@@ -7,7 +7,9 @@ import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.ext.ioWithData
 import com.lanier.roco.picturebook.ext.launchSafe
 import com.lanier.roco.picturebook.ext.main
+import com.lanier.roco.picturebook.feature.search.entity.SearchModel
 import com.lanier.roco.picturebook.manager.AppData
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 
 class SearchViewModel : ViewModel() {
@@ -43,12 +45,26 @@ class SearchViewModel : ViewModel() {
         search(lastText)
     }
 
-    fun search(input: String) {
-        if (AppData.spiritMaxValidId <= 0) return
-        if (lock.isLocked) return
-        if (lastText == input) return
+    fun loadMore() {
+        search("", false)
+    }
+
+    fun search(input: String, refresh: Boolean = true) {
         launchSafe {
+            if (input.isEmpty()) {
+                spirits.value = Triple(page, emptyList(), true)
+                delay(100)
+                return@launchSafe
+            }
+            if (AppData.spiritMaxValidId <= 0) {
+                spirits.value = Triple(page, emptyList(), true)
+                delay(100)
+                return@launchSafe
+            }
+            if (lock.isLocked) return@launchSafe
             lock.lock()
+            lastText = input
+            if (refresh) page = 1
             val gid = if (spiritSearchModel.groupId <= 0) null else spiritSearchModel.groupId.toString()
             val pid = if (spiritSearchModel.propertyId <= 0) null else spiritSearchModel.propertyId.toString()
             val dao = VioletDatabase.db.spiritDao()
@@ -79,7 +95,6 @@ class SearchViewModel : ViewModel() {
                 spirits.value = Triple(page, list, isEnd)
                 if (isEnd.not()) page++
             }
-            lastText = input
             lock.unlock()
         }
     }

@@ -7,55 +7,65 @@
 
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
+    <FrameLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context=".feature.search.SearchActivity">
 
-        <LinearLayout
+        <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/drawerLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:menu="@menu/search_menu"
-                app:navigationIcon="@drawable/baseline_arrow_back_24"
-                app:title="@string/title_search"
-                app:titleTextColor="@color/dimo_md_theme_primary" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="8dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="none"
-                    android:hint="@string/title_search"
-                    android:imeOptions="actionSearch"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    tools:text="喵喵" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="3"
-                tools:listitem="@layout/item_spirit" />
-        </LinearLayout>
+                android:orientation="vertical">
 
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:menu="@menu/search_menu"
+                    app:navigationIcon="@drawable/baseline_arrow_back_24"
+                    app:title="@string/title_search"
+                    app:titleTextColor="@color/dimo_md_theme_primary" />
 
-    </androidx.drawerlayout.widget.DrawerLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="none"
+                        android:hint="@string/title_search"
+                        android:imeOptions="actionSearch"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        tools:text="喵喵" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="3"
+                    tools:listitem="@layout/item_spirit" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/flSearchOpt"
+                android:layout_gravity="end"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </androidx.drawerlayout.widget.DrawerLayout>
+    </FrameLayout>
 </layout>

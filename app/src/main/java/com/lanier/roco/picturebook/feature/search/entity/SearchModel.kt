@@ -1,4 +1,4 @@
-package com.lanier.roco.picturebook.feature.search
+package com.lanier.roco.picturebook.feature.search.entity
 
 data class SearchModel(
     val propertyId: Int = -1, // 多选过滤: 属性
