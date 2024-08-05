@@ -28,7 +28,9 @@ object AppData {
     object SPData {
 
         private const val SP_KEY_SYNC_TIME = "sync_time"
+        private const val SP_KEY_FUZZY_QUERY_BY_NAME = "fuzzy_query_by_name"
 
         var syncTime : Long by SPDelegate(SP_KEY_SYNC_TIME, 0L)
+        var fuzzyQueryByName: Boolean by SPDelegate(SP_KEY_FUZZY_QUERY_BY_NAME, true)
     }
 }

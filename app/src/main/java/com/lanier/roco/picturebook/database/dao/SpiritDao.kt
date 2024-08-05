@@ -99,13 +99,13 @@ interface SpiritDao {
     @Query(
         """
         select * from spirit
-        where name like '%'||:name||'%'
+        where (:exact=1 and name=:name) or (:exact=0 and name like '%'||:name||'%')
         and (:propertyId is null or property like '%'||:propertyId||'%')
         and (:groupId is null or group_id=:groupId)
         order by cast(id as integer) desc limit :limit offset :offset
     """
     )
-    fun getSpiritsByNameAndOtherFiled(name: String, propertyId: String?, groupId: String?, offset: Int, limit: Int = 20): List<Spirit>
+    fun getSpiritsByNameAndOtherFiled(name: String, propertyId: String?, groupId: String?, exact: Int = 0, offset: Int, limit: Int = 20): List<Spirit>
 
     @Query("select * from spirit order by cast(id as integer) desc limit 1")
     fun getLatestSpirit(): Spirit

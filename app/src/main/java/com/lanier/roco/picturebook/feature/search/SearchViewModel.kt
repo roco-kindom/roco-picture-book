@@ -9,6 +9,7 @@ import com.lanier.roco.picturebook.ext.launchSafe
 import com.lanier.roco.picturebook.ext.main
 import com.lanier.roco.picturebook.feature.search.entity.SearchModel
 import com.lanier.roco.picturebook.manager.AppData
+import com.lanier.roco.picturebook.manager.SPDelegate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 
@@ -22,6 +23,21 @@ class SearchViewModel : ViewModel() {
     private var spiritSearchModel = SearchModel()
 
     val spirits = MutableLiveData<Triple<Int, List<Spirit>, Boolean>>()
+
+    /**
+     * 模糊查询id
+     */
+    var fuzzyQueryById = false
+
+    /**
+     * 按名称模糊查询
+     */
+    var fuzzyQueryByName : Boolean = true
+        set(value) {
+            AppData.SPData.fuzzyQueryByName = value
+            field = value
+        }
+        get() = AppData.SPData.fuzzyQueryByName
 
     fun modifyProperty(property: Int? = null) {
         val pid = property?.let { sp ->
@@ -86,6 +102,7 @@ class SearchViewModel : ViewModel() {
                     name = input,
                     groupId = gid,
                     propertyId = pid,
+                    exact = if (fuzzyQueryByName) 0 else 1,
                     offset = (page - 1) * limit,
                     limit = limit)
                 }

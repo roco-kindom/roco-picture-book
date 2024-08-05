@@ -75,6 +75,12 @@ class SearchOptFragment : Fragment() {
 
         binding.btnResearch.isEnabled = AppData.spiritGroups.isNotEmpty() && AppData.spiritProperties.isNotEmpty()
 
+        binding.cbSearchByName.isChecked = AppData.SPData.fuzzyQueryByName
+
+        binding.cbSearchByName.setOnCheckedChangeListener { buttonView, isChecked ->
+            AppData.SPData.fuzzyQueryByName = isChecked
+        }
+
         binding.btnResearch.setOnClickListener {
             onResearchListener?.onResearch()
             viewmodel.modifyProperty(currentSelectProperty)

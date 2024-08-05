@@ -19,6 +19,8 @@
     <string name="p_ability_value_def_value">%s/%s</string>
 
     <string name="research">重新搜索</string>
+    <string name="persistent_search_configuration">持久化搜索配置</string>
+    <string name="fuzzy_search_by_name">按名称模糊搜索</string>
 
     <string name="spirit_all">全部</string>
     <string name="spirit_no">编号</string>

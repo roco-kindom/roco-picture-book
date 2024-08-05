@@ -53,6 +53,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:layout_marginTop="8dp"
+                android:padding="8dp"
+                android:textStyle="bold"
+                android:textColor="@color/dimo_md_theme_primary"
+                android:text="@string/persistent_search_configuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                android:id="@+id/cbSearchById"
+                android:enabled="false"
+                android:paddingHorizontal="8dp"
+                android:layoutDirection="rtl"
+                android:textSize="12sp"
+                android:textColor="@color/dimo_md_theme_outline"
+                android:text="@string/fuzzy_search_by_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                android:id="@+id/cbSearchByName"
+                android:paddingHorizontal="8dp"
+                android:layoutDirection="rtl"
+                android:textSize="12sp"
+                android:textColor="@color/dimo_md_theme_primary"
+                android:text="@string/fuzzy_search_by_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnResearch"
                 android:layout_marginTop="16dp"
