@@ -62,7 +62,7 @@ class SearchViewModel : ViewModel() {
     }
 
     fun loadMore() {
-        search("", false)
+        search(lastText, false)
     }
 
     fun search(input: String, refresh: Boolean = true) {
@@ -107,6 +107,7 @@ class SearchViewModel : ViewModel() {
                     limit = limit)
                 }
             }
+            println(">>>> 数据 - ${list.size}")
             main {
                 val isEnd = list.size < limit
                 spirits.value = Triple(page, list, isEnd)
