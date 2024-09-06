@@ -42,7 +42,7 @@ class MainViewModel : ViewModel() {
                 val spirits = dao.getSpiritsByPage(offset = (page - 1) * limit, limit)
                 if (spirits.isNotEmpty()) {
                     if (AppData.spiritMaxValidId <= 0) {
-                        AppData.spiritMaxValidId = dao.getLatestSpirit().id.toInt()
+                        AppData.spiritMaxValidId = dao.getLatestSpirit().spiritId.toInt()
                     }
                     if (AppData.spiritProperties.isEmpty()) {
                         loadSpiritProperties()

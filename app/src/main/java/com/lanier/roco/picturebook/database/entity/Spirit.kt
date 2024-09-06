@@ -9,7 +9,8 @@ import com.lanier.roco.picturebook.database.Constant
 
 @Entity(tableName = Constant.TN_SPIRIT)
 data class Spirit(
-    @PrimaryKey val id: String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @ColumnInfo(name = "spirit_id") val spiritId: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "icon_src") val iconSrc: String,
     @ColumnInfo(name = "interest") val interest: String,
@@ -46,6 +47,7 @@ data class Spirit(
     @ColumnInfo(name = "catch_rate") val catchRate: String,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readInt(),
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -82,7 +84,8 @@ data class Spirit(
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(id)
+        parcel.writeInt(id)
+        parcel.writeString(spiritId)
         parcel.writeString(name)
         parcel.writeString(iconSrc)
         parcel.writeString(interest)

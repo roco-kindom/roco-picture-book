@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RocoPictureBook</string>
 
-    <string name="title_app_name">Roco图鉴</string>
+    <string name="title_app_name">洛克图鉴</string>
     <string name="title_settings">设置</string>
     <string name="title_search">搜索</string>
 
