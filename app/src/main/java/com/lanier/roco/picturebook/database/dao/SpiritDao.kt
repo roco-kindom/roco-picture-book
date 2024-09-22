@@ -32,7 +32,7 @@ interface SpiritDao {
     @Insert(entity = Skin::class, onConflict = REPLACE)
     fun upsertAllSkins(skins: List<Skin>): List<Long>
 
-    @Query("select * from spirit where id=:id")
+    @Query("select * from spirit where spirit_id=:id")
     fun getSpiritById(id: String): Spirit
 
     @Query("select * from spirit where name like '%'||:name||'%'")
@@ -59,26 +59,34 @@ interface SpiritDao {
     @Query("select * from skin")
     fun getAllSkins(): List<Skin>
 
-    @Query("select * from spirit order by cast(id as integer) desc limit :limit offset :offset")
+//    @Query("select * from spirit order by cast(id as integer) desc limit :limit offset :offset")
+//    fun getSpiritsByPage(offset: Int, limit: Int = 20): List<Spirit>
+
+    @Query("select * from spirit order by rowid desc limit :limit offset :offset")
     fun getSpiritsByPage(offset: Int, limit: Int = 20): List<Spirit>
 
-    @Query("select * from spirit where(cast(id as TEXT) like '%'||:searchText||'%' or name like '%'||:searchText||'%' or group_id like '%'||:searchText||'%' or property like '%'||:searchText||'%') order by cast(id as integer) desc limit :limit offset :offset")
+    @Deprecated("useless")
+    @Query("select * from spirit where(cast(spirit_id as TEXT) like '%'||:searchText||'%' or name like '%'||:searchText||'%' or group_id like '%'||:searchText||'%' or property like '%'||:searchText||'%') order by cast(spirit_id as integer) desc limit :limit offset :offset")
     fun getSpiritsSearchByAllPage(searchText: String, offset: Int, limit: Int = 20): List<Spirit>
 
-    @Query("select * from spirit where cast(id as TEXT) like '%'||:searchText||'%' order by cast(id as integer) desc limit :limit offset :offset")
+    @Deprecated("useless")
+    @Query("select * from spirit where cast(spirit_id as TEXT) like '%'||:searchText||'%' order by cast(spirit_id as integer) desc limit :limit offset :offset")
     fun getSpiritsSearchByIdPage(searchText: String, offset: Int, limit: Int = 20): List<Spirit>
 
-    @Query("select * from spirit where name like '%'||:searchText||'%' order by cast(id as integer) desc limit :limit offset :offset")
+    @Deprecated("useless")
+    @Query("select * from spirit where name like '%'||:searchText||'%' order by cast(spirit_id as integer) desc limit :limit offset :offset")
     fun getSpiritsSearchByNamePage(searchText: String, offset: Int, limit: Int = 20): List<Spirit>
 
-    @Query("select * from spirit where group_id like '%'||:searchText||'%' order by cast(id as integer) desc limit :limit offset :offset")
+    @Deprecated("useless")
+    @Query("select * from spirit where group_id like '%'||:searchText||'%' order by cast(spirit_id as integer) desc limit :limit offset :offset")
     fun getSpiritsSearchByGroupIdPage(
         searchText: String,
         offset: Int,
         limit: Int = 20
     ): List<Spirit>
 
-    @Query("select * from spirit where property like '%'||:searchText||'%' order by cast(id as integer) desc limit :limit offset :offset")
+    @Deprecated("useless")
+    @Query("select * from spirit where property like '%'||:searchText||'%' order by cast(spirit_id as integer) desc limit :limit offset :offset")
     fun getSpiritsSearchByPropertyIdPage(
         searchText: String,
         offset: Int,
@@ -88,10 +96,10 @@ interface SpiritDao {
     @Query(
         """
         select * from spirit
-        where cast(id as TEXT)=:id
+        where cast(spirit_id as TEXT)=:id
         and (:propertyId is null or property like '%'||:propertyId||'%')
         and (:groupId is null or group_id=:groupId)
-        order by cast(id as integer) desc limit :limit offset :offset
+        order by rowid desc limit :limit offset :offset
     """
     )
     fun getSpiritsByIdAndOtherFiled(id: String, propertyId: String?, groupId: String?, offset: Int, limit: Int = 20): List<Spirit>
@@ -102,11 +110,11 @@ interface SpiritDao {
         where (:exact=1 and name=:name) or (:exact=0 and name like '%'||:name||'%')
         and (:propertyId is null or property like '%'||:propertyId||'%')
         and (:groupId is null or group_id=:groupId)
-        order by cast(id as integer) desc limit :limit offset :offset
+        order by rowid desc limit :limit offset :offset
     """
     )
     fun getSpiritsByNameAndOtherFiled(name: String, propertyId: String?, groupId: String?, exact: Int = 0, offset: Int, limit: Int = 20): List<Spirit>
 
-    @Query("select * from spirit order by cast(id as integer) desc limit 1")
+    @Query("select * from spirit order by cast(spirit_id as integer) desc limit 1")
     fun getLatestSpirit(): Spirit
 }

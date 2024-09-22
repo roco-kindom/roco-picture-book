@@ -10,15 +10,20 @@ import com.lanier.roco.picturebook.ext.main
 import com.lanier.roco.picturebook.feature.search.entity.SearchModel
 import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.manager.SPDelegate
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
+import java.util.concurrent.atomic.AtomicBoolean
 
 class SearchViewModel : ViewModel() {
 
     private val limit = 20
     private var page = 1
-    private var lock = Mutex()
     private var lastText = ""
+
+    private var searchJob: Job? = null
+    private var isLoading = AtomicBoolean(false)
 
     private var spiritSearchModel = SearchModel()
 
@@ -62,23 +67,24 @@ class SearchViewModel : ViewModel() {
     }
 
     fun loadMore() {
-        search("", false)
+        search(lastText, false)
     }
 
     fun search(input: String, refresh: Boolean = true) {
-        launchSafe {
+        val oldJob = searchJob
+        searchJob = launchSafe {
             if (input.isEmpty()) {
-                spirits.value = Triple(page, emptyList(), true)
                 delay(100)
+                spirits.value = Triple(page, emptyList(), true)
                 return@launchSafe
             }
             if (AppData.spiritMaxValidId <= 0) {
-                spirits.value = Triple(page, emptyList(), true)
                 delay(100)
+                spirits.value = Triple(page, emptyList(), true)
                 return@launchSafe
             }
-            if (lock.isLocked) return@launchSafe
-            lock.lock()
+            oldJob?.cancelAndJoin()
+            isLoading.set(true)
             lastText = input
             if (refresh) page = 1
             val gid = if (spiritSearchModel.groupId <= 0) null else spiritSearchModel.groupId.toString()
@@ -112,7 +118,8 @@ class SearchViewModel : ViewModel() {
                 spirits.value = Triple(page, list, isEnd)
                 if (isEnd.not()) page++
             }
-            lock.unlock()
+            isLoading.set(false)
+            searchJob = null
         }
     }
 }

@@ -87,7 +87,7 @@
 
         <TextView
             android:id="@+id/tvID"
-            android:text="@{String.format(@string/p_id, spirit.id)}"
+            android:text="@{String.format(@string/p_id, spirit.spiritId)}"
             android:textColor="@color/dimo_md_theme_primary"
             android:textSize="13sp"
             android:layout_marginStart="20dp"

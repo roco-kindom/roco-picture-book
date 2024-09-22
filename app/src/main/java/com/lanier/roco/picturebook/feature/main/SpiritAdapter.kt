@@ -130,7 +130,7 @@ class SpiritViewHolder(view: View) : ViewHolder(view) {
 
     fun bind(spirit: Spirit) {
         AppData.loadSpiritAvatar(avatar, spirit.iconSrc)
-        spiritId.text = spirit.id
+        spiritId.text = spirit.spiritId
         name.text = spirit.name
         val properties = spirit.property.split(",")
         if (properties.size == 2) {

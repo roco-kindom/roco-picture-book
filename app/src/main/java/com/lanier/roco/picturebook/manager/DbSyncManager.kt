@@ -3,9 +3,11 @@ package com.lanier.roco.picturebook.manager
 import android.os.Build
 import com.lanier.roco.picturebook.database.VioletDatabase
 import com.lanier.roco.picturebook.database.entity.Property
+import com.lanier.roco.picturebook.database.entity.Skill
 import com.lanier.roco.picturebook.database.entity.Skin
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.database.entity.SpiritGroup
+import com.lanier.roco.picturebook.database.entity.Talent
 import com.lanier.roco.picturebook.ext.launchSafe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -172,8 +174,14 @@ object DbSyncManager {
         val spiritSkinDesList = mutableListOf<Skin>()
         val spiritDesList = mutableListOf<Spirit>()
 
+        val skillList = mutableListOf<Skill>()
+        val talentList = mutableListOf<Talent>()
+
         val spiritConfigRegex = """<SpiritConfig.*?>(.*?)</SpiritConfig>""".toRegex(RegexOption.DOT_MATCHES_ALL)
         val spiritConfigContent = spiritConfigRegex.find(content)?.groups?.get(1)?.value ?: ""
+
+        val skillConfigRegex = """<SpiritSkillConfig.*?>(.*?)</SpiritSkillConfig>""".toRegex(RegexOption.DOT_MATCHES_ALL)
+        val skillConfigContent = skillConfigRegex.find(content)?.groups?.get(1)?.value ?: ""
 
         val nodeRegex = """<(\w+)\s+(.*?)/>""".toRegex()
         nodeRegex.findAll(spiritConfigContent).forEachIndexed { index, matchResult ->
@@ -212,6 +220,7 @@ object DbSyncManager {
                         spiritDesList.add(
                             Spirit(
                                 id = attributeMap["id"] ?: "",
+                                spiritId = attributeMap["id"] ?: "",
                                 name = attributeMap["name"] ?: "",
                                 iconSrc = attributeMap["iconSrc"] ?: "",
                                 interest = attributeMap["interest"] ?: "",
@@ -250,11 +259,61 @@ object DbSyncManager {
             }
         }
 
+        nodeRegex.findAll(skillConfigContent).forEachIndexed { index, matchResult ->
+            val nodeName = matchResult.groups[1]?.value ?: ""
+            val attributes = matchResult.groups[2]?.value ?: ""
+
+            val keyValueRegex = """(\w+)="([^"]*)"""".toRegex()
+            val attributeMap = mutableMapOf<String, String>()
+            keyValueRegex.findAll(attributes).forEach { result ->
+                val key = result.groups[1]?.value ?: ""
+                val value = result.groups[2]?.value ?: ""
+                attributeMap[key] = value
+            }
+
+            when (nodeName) {
+                "SpiritSkillDes" -> {
+                    val id = attributeMap["id"] ?: ""
+                    if (id.toInt() < 10000) {
+                        skillList.add(
+                            Skill(
+                                id = id,
+                                name = attributeMap["name"] ?: "",
+                                description = attributeMap["description"] ?: "",
+                                power = attributeMap["power"] ?: "",
+                                ppMax = attributeMap["ppMax"] ?: "",
+                                speed = attributeMap["speed"] ?: "",
+                                property = attributeMap["property"] ?: "",
+                                attackType = attributeMap["attackType"] ?: "",
+                                damageType = attributeMap["damageType"] ?: "",
+                                src = attributeMap["src"] ?: "",
+                            )
+                        )
+                    }
+                }
+
+                "talentDes" -> {
+                    talentList.add(
+                        Talent(
+                            id = attributeMap["id"] ?: "",
+                            name = attributeMap["name"] ?: "",
+                            desc = attributeMap["desc"] ?: "",
+                        )
+                    )
+                }
+            }
+        }
+
         VioletDatabase.db.spiritDao().run {
             val upsertPropertySize = upsertAllProperty(properties = propertyDesList)
             val upsertEggGroupSize = upsertAllEggGroup(groups = groupTypeDesList)
             val upsertSkinSize = upsertAllSkins(skins = spiritSkinDesList)
             val upsertSpiritSize = upsertAllSpirits(spirits = spiritDesList)
+            upsertAllTalents(talentList)
+        }
+
+        VioletDatabase.db.skillDao().run {
+            upsertSkillAll(skillList)
         }
     }
 

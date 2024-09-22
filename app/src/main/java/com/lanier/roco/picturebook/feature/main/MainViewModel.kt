@@ -10,13 +10,18 @@ import com.lanier.roco.picturebook.ext.main
 import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.manager.DbSyncManager
 import com.lanier.roco.picturebook.manager.SyncAction
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.sync.Mutex
+import java.util.concurrent.atomic.AtomicBoolean
 
 class MainViewModel : ViewModel() {
 
     private val limit = 20
     private var page = 1
-    private var lock = Mutex()
+    private var isLoading = AtomicBoolean(false)
+
+    private var mainLoadJob: Job? = null
 
     val spirits = MutableLiveData<Triple<Int, List<Spirit>, Boolean>>()
     val syncAction = MutableLiveData<SyncAction>()
@@ -31,18 +36,20 @@ class MainViewModel : ViewModel() {
     }
 
     fun load(refresh: Boolean = false) {
-        if (lock.isLocked) return
-        launchSafe {
-            lock.lock()
-            if (refresh) {
-                page = 1
-            }
+        if (isLoading.get()) {
+            return
+        }
+        val oldJob = mainLoadJob
+        mainLoadJob = launchSafe {
+            oldJob?.cancelAndJoin()
+            isLoading.set(true)
+            if (refresh) page = 1
             val list = ioWithData {
                 val dao = VioletDatabase.db.spiritDao()
                 val spirits = dao.getSpiritsByPage(offset = (page - 1) * limit, limit)
                 if (spirits.isNotEmpty()) {
                     if (AppData.spiritMaxValidId <= 0) {
-                        AppData.spiritMaxValidId = dao.getLatestSpirit().id.toInt()
+                        AppData.spiritMaxValidId = dao.getLatestSpirit().spiritId.toInt()
                     }
                     if (AppData.spiritProperties.isEmpty()) {
                         loadSpiritProperties()
@@ -60,7 +67,8 @@ class MainViewModel : ViewModel() {
                     page++
                 }
             }
-            lock.unlock()
+            isLoading.set(false)
+            mainLoadJob = null
         }
     }
 

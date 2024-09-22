@@ -36,26 +36,24 @@ fun ViewModel.launchIOSafe(
     error: ((Throwable) -> Unit)? = null,
     block: suspend CoroutineScope.() -> Unit,
 ) = launchSafe(
-        start = start,
-        error = error,
-        context = Dispatchers.IO,
-        block = block,
-    )
+    start = start,
+    error = error,
+    context = Dispatchers.IO,
+    block = block,
+)
 
 fun ViewModel.launchSafe(
     start: CoroutineStart = CoroutineStart.DEFAULT,
     error: ((Throwable) -> Unit)? = null,
     context: CoroutineContext = Dispatchers.Main,
     block: suspend CoroutineScope.() -> Unit,
+) = viewModelScope.launch(
+    context = context + CoroutineExceptionHandler { _, throwable ->
+        error?.invoke(throwable)
+    },
+    start = start,
 ) {
-    viewModelScope.launch(
-        context = context + CoroutineExceptionHandler { _, throwable ->
-            error?.invoke(throwable)
-        },
-        start = start,
-    ) {
-        block.invoke(this)
-    }
+    block.invoke(this)
 }
 
 suspend fun io(

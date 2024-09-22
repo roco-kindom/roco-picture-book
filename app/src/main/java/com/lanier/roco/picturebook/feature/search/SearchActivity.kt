@@ -87,17 +87,14 @@ class SearchActivity : AppCompatActivity() {
             return@setOnEditorActionListener true
         }
 
-        launchSafe {
-            viewmodel.spirits.observe(this@SearchActivity) {
-                mAdapter.isEnd = it.third
-                if (it.first == 1) {
-                    mAdapter.data = it.second
-                } else {
-                    mAdapter.addData(it.second)
-                }
+        viewmodel.spirits.observe(this@SearchActivity) {
+            mAdapter.isEnd = it.third
+            if (it.first == 1) {
+                mAdapter.data = it.second
+            } else {
+                mAdapter.addData(it.second)
             }
         }
-
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
