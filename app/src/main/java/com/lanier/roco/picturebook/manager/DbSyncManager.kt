@@ -219,6 +219,7 @@ object DbSyncManager {
                     if (id.toInt() < 10000) {
                         spiritDesList.add(
                             Spirit(
+                                id = attributeMap["id"] ?: "",
                                 spiritId = attributeMap["id"] ?: "",
                                 name = attributeMap["name"] ?: "",
                                 iconSrc = attributeMap["iconSrc"] ?: "",

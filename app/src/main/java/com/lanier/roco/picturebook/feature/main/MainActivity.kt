@@ -112,33 +112,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        launchSafe {
-            viewmodel.spirits.observe(this@MainActivity) {
-                mAdapter.isEnd = it.third
-                if (it.first == 1) {
-                    mAdapter.data = it.second
-                } else {
-                    mAdapter.addData(it.second)
-                }
+        viewmodel.spirits.observe(this@MainActivity) {
+            mAdapter.isEnd = it.third
+            if (it.first == 1) {
+                mAdapter.data = it.second
+            } else {
+                mAdapter.addData(it.second)
             }
         }
 
-        launchSafe {
-            viewmodel.syncAction.observe(this@MainActivity) {
-                when (it) {
-                    is SyncAction.Completed -> {
-                        dismissLoading()
-                        if (it.success) {
-                            toast("同步完成")
-                            AppData.SPData.syncTime = System.currentTimeMillis()
-                            viewmodel.load(true)
-                        } else {
-                            dialog(it.thr?.message?:"Unknown Error", cancelable = false)
-                        }
+        viewmodel.syncAction.observe(this@MainActivity) {
+            when (it) {
+                is SyncAction.Completed -> {
+                    dismissLoading()
+                    if (it.success) {
+                        toast("同步完成")
+                        AppData.SPData.syncTime = System.currentTimeMillis()
+                        viewmodel.load(true)
+                    } else {
+                        dialog(it.thr?.message?:"Unknown Error", cancelable = false)
                     }
-                    SyncAction.Loading -> {
-                        showLoading(false)
-                    }
+                }
+                SyncAction.Loading -> {
+                    showLoading(false)
                 }
             }
         }
