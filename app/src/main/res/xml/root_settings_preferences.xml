@@ -30,12 +30,11 @@
             android:key="@string/key_sync_skill"
             android:title="@string/title_sync_skill"
             android:summary="@string/title_sync_skill_summary"
-            android:enabled="false"/>
+            android:enabled="true"/>
 
         <CheckBoxPreference
-            android:key="@string/key_sync_props"
-            android:title="@string/title_sync_props"
-            android:summary="@string/title_sync_props_summary"
+            android:key="@string/key_sync_manor_seeds"
+            android:title="@string/title_sync_manor_seed"
             android:enabled="false"/>
 
         <CheckBoxPreference

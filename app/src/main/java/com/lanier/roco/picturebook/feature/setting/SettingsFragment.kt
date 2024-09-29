@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -22,6 +23,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         super.onViewCreated(view, savedInstanceState)
         initSyncTypePreference()
         initSyncTime()
+        initSyncChoice()
         initAppVersion()
     }
 
@@ -65,6 +67,38 @@ class SettingsFragment : PreferenceFragmentCompat() {
         syncTimePreference?.let {
             val lastTime = AppData.SPData.syncTime
             it.summary = if (lastTime <= 0L) "--" else lastTime.toFormattedString("yyyy/MM/dd HH:mm:ss")
+        }
+    }
+
+    private fun initSyncChoice() {
+        val choiceOfSkillConfig = preferenceScreen
+            .findPreference<CheckBoxPreference>(getString(R.string.key_sync_skill))
+        choiceOfSkillConfig?.let {
+            it.onPreferenceChangeListener =
+                Preference.OnPreferenceChangeListener { preference, newValue ->
+                    AppData.syncWithSkillConfig = (newValue as? Boolean) ?: false
+                    true
+                }
+        }
+
+        val choiceOfManorSeedsConfig = preferenceScreen
+            .findPreference<CheckBoxPreference>(getString(R.string.key_sync_manor_seeds))
+        choiceOfManorSeedsConfig?.let {
+            it.onPreferenceChangeListener =
+                Preference.OnPreferenceChangeListener { preference, newValue ->
+                    AppData.syncWithManorSeedConfig = (newValue as? Boolean) ?: false
+                    true
+                }
+        }
+
+        val choiceOfScenesConfig = preferenceScreen
+            .findPreference<CheckBoxPreference>(getString(R.string.key_sync_scene))
+        choiceOfScenesConfig?.let {
+            it.onPreferenceChangeListener =
+                Preference.OnPreferenceChangeListener { preference, newValue ->
+                    AppData.syncWithSceneConfig = (newValue as? Boolean) ?: false
+                    true
+                }
         }
     }
 

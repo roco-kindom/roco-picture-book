@@ -11,7 +11,25 @@ object AppData {
 
     const val spiritIconUrl = "https://res.17roco.qq.com/res/combat/icons/"
 
+    /**
+     * 同步方式
+     */
     var syncType : SyncType = SyncType.CacheFile
+
+    /**
+     * 是否同步技能配置
+     */
+    var syncWithSkillConfig: Boolean = false
+
+    /**
+     * 是否同步农场种子配置
+     */
+    var syncWithManorSeedConfig: Boolean = false
+
+    /**
+     * 是否同步场景配置
+     */
+    var syncWithSceneConfig: Boolean = false
 
     var spiritMaxValidId = -1
     val spiritProperties = mutableMapOf<Int, Property>()

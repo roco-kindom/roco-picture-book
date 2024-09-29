@@ -10,9 +10,9 @@ import com.lanier.roco.picturebook.ext.main
 import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.manager.DbSyncManager
 import com.lanier.roco.picturebook.manager.SyncAction
+import com.lanier.roco.picturebook.manager.SyncTask
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.sync.Mutex
 import java.util.concurrent.atomic.AtomicBoolean
 
 class MainViewModel : ViewModel() {
@@ -28,6 +28,7 @@ class MainViewModel : ViewModel() {
 
     fun sync(fromServer: Boolean) {
         DbSyncManager.syncData(
+            task = buildSyncTask(),
             forceSync = fromServer,
             onStart = { syncAction.value = SyncAction.Loading },
             onWarning = {},
@@ -87,4 +88,11 @@ class MainViewModel : ViewModel() {
             AppData.spiritProperties[index + 1] = property
         }
     }
+
+    private fun buildSyncTask() = SyncTask(
+        withSpiritConfig = true,
+        withSkillConfig = AppData.syncWithSkillConfig,
+        withManorSeedConfig = AppData.syncWithManorSeedConfig,
+        withSceneConfig = AppData.syncWithSceneConfig,
+    )
 }

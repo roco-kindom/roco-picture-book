@@ -3,10 +3,12 @@ package com.lanier.roco.picturebook.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import com.lanier.roco.picturebook.database.entity.EffectDetails
 import com.lanier.roco.picturebook.database.entity.Skill
 import com.lanier.roco.picturebook.database.entity.SkillEffect
+import com.lanier.roco.picturebook.database.entity.Talent
 
 @Dao
 interface SkillDao {
@@ -19,6 +21,9 @@ interface SkillDao {
 
     @Insert(entity = EffectDetails::class, onConflict = OnConflictStrategy.REPLACE)
     fun upsertEffectDetailsAll(details: List<EffectDetails>) : List<Long>
+
+    @Insert(entity = Talent::class, onConflict = REPLACE)
+    fun upsertAllTalents(talents: List<Talent>): List<Long>
 
     @Query("select * from skill where id=:id")
     fun getSkillById(id: String) : Skill
@@ -34,6 +39,9 @@ interface SkillDao {
 
     @Query("select * from effect_details where id=:id")
     fun getSkillEffectDetailsById(id: String) : EffectDetails
+
+    @Query("select * from talent")
+    fun getAllTalents(): List<Talent>
 
     /**
      * @param property 与 [skill_effect] 表的 [id] 对应

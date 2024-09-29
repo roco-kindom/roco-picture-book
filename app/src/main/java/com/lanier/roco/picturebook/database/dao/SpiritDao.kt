@@ -26,9 +26,6 @@ interface SpiritDao {
     @Insert(entity = Equipment::class, onConflict = REPLACE)
     fun upsertAllEquipments(equipments: List<Equipment>): List<Long>
 
-    @Insert(entity = Talent::class, onConflict = REPLACE)
-    fun upsertAllTalents(talents: List<Talent>): List<Long>
-
     @Insert(entity = Skin::class, onConflict = REPLACE)
     fun upsertAllSkins(skins: List<Skin>): List<Long>
 
@@ -52,9 +49,6 @@ interface SpiritDao {
 
     @Query("select * from equipment")
     fun getAllEquipments(): List<Equipment>
-
-    @Query("select * from talent")
-    fun getAllTalents(): List<Talent>
 
     @Query("select * from skin")
     fun getAllSkins(): List<Skin>

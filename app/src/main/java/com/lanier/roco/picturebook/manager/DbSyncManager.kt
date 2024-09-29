@@ -43,6 +43,7 @@ object DbSyncManager {
 
     fun syncData(
         forceSync: Boolean,
+        task: SyncTask,
         onStart: () -> Unit,
         onWarning: (Throwable) -> Unit,
         onCompleted: (Boolean, Throwable?) -> Unit
@@ -53,11 +54,13 @@ object DbSyncManager {
         scope.launchSafe {
             if (forceSync) {
                 syncFromServer(
+                    task = task,
                     onStart = onStart,
                     onCompleted = { s, t -> withContext(Dispatchers.Main) { onCompleted.invoke(s, t) } },
                 )
             } else {
                 syncFromCache(
+                    task = task,
                     onStart = onStart,
                     onCompleted = { s, t -> withContext(Dispatchers.Main) { onCompleted.invoke(s, t) } },
                 )
@@ -66,6 +69,7 @@ object DbSyncManager {
     }
 
     private suspend fun syncFromServer(
+        task: SyncTask,
         onStart: () -> Unit,
         onCompleted: suspend (Boolean, Throwable?) -> Unit
     ) {
@@ -82,7 +86,11 @@ object DbSyncManager {
                 val responseCode = connection.responseCode
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     val inputStream = connection.inputStream
-                    decompressAndSaveToLocalCache(inputStream, onCompleted = onCompleted)
+                    decompressAndSaveToLocalCache(
+                        task = task,
+                        inputStream = inputStream,
+                        onCompleted = onCompleted
+                    )
                 } else {
                     val responseMessage = connection.responseMessage
                     onCompleted.invoke(false, Throwable("网络错误 : $responseCode $responseMessage"))
@@ -96,6 +104,7 @@ object DbSyncManager {
     }
 
     private suspend fun syncFromCache(
+        task: SyncTask,
         onStart: () -> Unit,
         onCompleted: suspend (Boolean, Throwable?) -> Unit
     ) {
@@ -111,12 +120,13 @@ object DbSyncManager {
         }
         withContext(Dispatchers.IO) {
             val content = file.readText()
-            parseContent(content)
+            parseContent(task = task, content = content)
         }
         onCompleted.invoke(true, null)
     }
 
     private suspend fun decompressAndSaveToLocalCache(
+        task: SyncTask,
         inputStream: InputStream,
         onCompleted: suspend (Boolean, Throwable?) -> Unit
     ) {
@@ -146,7 +156,7 @@ object DbSyncManager {
                         FileOutputStream(cachePath).use { fos ->
                             fos.write(decompressedData)
                         }
-                        parseStream(outputStream)
+                        parseStream(task, outputStream)
                     }
                     onCompleted.invoke(true, null)
                 } catch (e: Exception) {
@@ -162,20 +172,13 @@ object DbSyncManager {
         }
     }
 
-    private fun parseStream(outputStream: ByteArrayOutputStream) {
+    private suspend fun parseStream(task: SyncTask, outputStream: ByteArrayOutputStream) {
         val byteArray = outputStream.toByteArray()
         val content = byteArray.toString(Charsets.UTF_8)
-        parseContent(content)
+        parseContent(task, content)
     }
 
-    private fun parseContent(content: String) {
-        val propertyDesList = mutableListOf<Property>()
-        val groupTypeDesList = mutableListOf<SpiritGroup>()
-        val spiritSkinDesList = mutableListOf<Skin>()
-        val spiritDesList = mutableListOf<Spirit>()
-
-        val skillList = mutableListOf<Skill>()
-        val talentList = mutableListOf<Talent>()
+    private suspend fun parseContent(task: SyncTask, content: String) {
 
         val spiritConfigRegex = """<SpiritConfig.*?>(.*?)</SpiritConfig>""".toRegex(RegexOption.DOT_MATCHES_ALL)
         val spiritConfigContent = spiritConfigRegex.find(content)?.groups?.get(1)?.value ?: ""
@@ -184,136 +187,164 @@ object DbSyncManager {
         val skillConfigContent = skillConfigRegex.find(content)?.groups?.get(1)?.value ?: ""
 
         val nodeRegex = """<(\w+)\s+(.*?)/>""".toRegex()
-        nodeRegex.findAll(spiritConfigContent).forEachIndexed { index, matchResult ->
-            val nodeName = matchResult.groups[1]?.value ?: ""
-            val attributes = matchResult.groups[2]?.value ?: ""
 
-            val keyValueRegex = """(\w+)="([^"]*)"""".toRegex()
-            val attributeMap = mutableMapOf<String, String>()
-            keyValueRegex.findAll(attributes).forEach { result ->
-                val key = result.groups[1]?.value ?: ""
-                val value = result.groups[2]?.value ?: ""
-                attributeMap[key] = value
+        if (task.withSpiritConfig) {
+            processSpiritConfig(nodeRegex, spiritConfigContent)
+        }
+        if (task.withSkillConfig) {
+            processSkillConfig(nodeRegex, skillConfigContent)
+        }
+    }
+
+    private suspend fun processSpiritConfig(nodeRegex: Regex, spiritConfigContent: String) {
+        val propertyDesList = mutableListOf<Property>()
+        val groupTypeDesList = mutableListOf<SpiritGroup>()
+        val spiritSkinDesList = mutableListOf<Skin>()
+        val spiritDesList = mutableListOf<Spirit>()
+        withContext(Dispatchers.Default) {
+            nodeRegex.findAll(spiritConfigContent).forEachIndexed { index, matchResult ->
+                val nodeName = matchResult.groups[1]?.value ?: ""
+                val attributes = matchResult.groups[2]?.value ?: ""
+
+                val keyValueRegex = """(\w+)="([^"]*)"""".toRegex()
+                val attributeMap = mutableMapOf<String, String>()
+                keyValueRegex.findAll(attributes).forEach { result ->
+                    val key = result.groups[1]?.value ?: ""
+                    val value = result.groups[2]?.value ?: ""
+                    attributeMap[key] = value
+                }
+                when (nodeName) {
+                    "PropertyDes" -> {
+                        val id = attributeMap["id"] ?: ""
+                        val name = attributeMap["name"] ?: ""
+                        propertyDesList.add(Property(id, name))
+                    }
+
+                    "groupTypeDes" -> {
+                        val id = attributeMap["id"] ?: ""
+                        val name = attributeMap["name"] ?: ""
+                        groupTypeDesList.add(SpiritGroup(id, name))
+                    }
+
+                    "spiritSkinDes" -> {
+                        val id = attributeMap["id"] ?: ""
+                        val name = attributeMap["name"] ?: ""
+                        val description = attributeMap["description"] ?: ""
+                        val getForm = attributeMap["getForm"] ?: ""
+                        val quality = attributeMap["quality"] ?: ""
+                        spiritSkinDesList.add(Skin(id, name, quality))
+                    }
+
+                    "SpiritDes" -> {
+                        val id = attributeMap["id"] ?: ""
+                        if (id.toInt() < 10000) {
+                            spiritDesList.add(
+                                Spirit(
+                                    id = attributeMap["id"] ?: "",
+                                    spiritId = attributeMap["id"] ?: "",
+                                    name = attributeMap["name"] ?: "",
+                                    iconSrc = attributeMap["iconSrc"] ?: "",
+                                    interest = attributeMap["interest"] ?: "",
+                                    color = attributeMap["color"] ?: "",
+                                    height = attributeMap["height"] ?: "",
+                                    weight = attributeMap["weight"] ?: "",
+                                    group = attributeMap["group"] ?: "",
+                                    firstID = attributeMap["firstID"] ?: "",
+                                    getForm = attributeMap["getForm"] ?: "",
+                                    description = attributeMap["description"] ?: "",
+                                    sm = attributeMap["sm"] ?: "",
+                                    wg = attributeMap["wg"] ?: "",
+                                    fy = attributeMap["fy"] ?: "",
+                                    mg = attributeMap["mg"] ?: "",
+                                    mk = attributeMap["mk"] ?: "",
+                                    sd = attributeMap["sd"] ?: "",
+                                    evolutionFormID = attributeMap["EvolutionFormID"] ?: "",
+                                    evolutionToIDs = attributeMap["EvolutiontoIDs"] ?: "",
+                                    endTime = attributeMap["endTime"] ?: "",
+                                    expType = attributeMap["expType"] ?: "",
+                                    property = attributeMap["features"] ?: "",
+                                    habitat = attributeMap["habitat"] ?: "",
+                                    isInBook = attributeMap["isInBook"] ?: "",
+                                    mType = attributeMap["Mtype"] ?: "",
+                                    mspeed = attributeMap["mspeed"] ?: "",
+                                    previewSrc = attributeMap["previewSrc"] ?: "",
+                                    propoLevel = attributeMap["propoLevel"] ?: "",
+                                    skinNum = attributeMap["skinnum"] ?: "",
+                                    src = attributeMap["src"] ?: "",
+                                    state = attributeMap["state"] ?: "",
+                                    catchRate = attributeMap["catchrate"] ?: ""
+                                )
+                            )
+                        }
+                    }
+                }
             }
-            when (nodeName) {
-                "PropertyDes" -> {
-                    val id = attributeMap["id"] ?: ""
-                    val name = attributeMap["name"] ?: ""
-                    propertyDesList.add(Property(id, name))
+        }
+
+        withContext(Dispatchers.IO) {
+            VioletDatabase.db.spiritDao().run {
+                val upsertPropertySize = upsertAllProperty(properties = propertyDesList)
+                val upsertEggGroupSize = upsertAllEggGroup(groups = groupTypeDesList)
+                val upsertSkinSize = upsertAllSkins(skins = spiritSkinDesList)
+                val upsertSpiritSize = upsertAllSpirits(spirits = spiritDesList)
+            }
+        }
+    }
+
+    private suspend fun processSkillConfig(nodeRegex: Regex, spiritConfigContent: String) {
+        val skillList = mutableListOf<Skill>()
+        val talentList = mutableListOf<Talent>()
+        withContext(Dispatchers.Default) {
+            nodeRegex.findAll(spiritConfigContent).forEachIndexed { index, matchResult ->
+                val nodeName = matchResult.groups[1]?.value ?: ""
+                val attributes = matchResult.groups[2]?.value ?: ""
+
+                val keyValueRegex = """(\w+)="([^"]*)"""".toRegex()
+                val attributeMap = mutableMapOf<String, String>()
+                keyValueRegex.findAll(attributes).forEach { result ->
+                    val key = result.groups[1]?.value ?: ""
+                    val value = result.groups[2]?.value ?: ""
+                    attributeMap[key] = value
                 }
-                "groupTypeDes" -> {
-                    val id = attributeMap["id"] ?: ""
-                    val name = attributeMap["name"] ?: ""
-                    groupTypeDesList.add(SpiritGroup(id, name))
-                }
-                "spiritSkinDes" -> {
-                    val id = attributeMap["id"] ?: ""
-                    val name = attributeMap["name"] ?: ""
-                    val description = attributeMap["description"] ?: ""
-                    val getForm = attributeMap["getForm"] ?: ""
-                    val quality = attributeMap["quality"] ?: ""
-                    spiritSkinDesList.add(Skin(id, name, quality))
-                }
-                "SpiritDes" -> {
-                    val id = attributeMap["id"] ?: ""
-                    if (id.toInt() < 10000) {
-                        spiritDesList.add(
-                            Spirit(
+
+                when (nodeName) {
+                    "SpiritSkillDes" -> {
+                        val id = attributeMap["id"] ?: ""
+                        if (id.toInt() < 10000) {
+                            skillList.add(
+                                Skill(
+                                    id = id,
+                                    name = attributeMap["name"] ?: "",
+                                    description = attributeMap["description"] ?: "",
+                                    power = attributeMap["power"] ?: "",
+                                    ppMax = attributeMap["ppMax"] ?: "",
+                                    speed = attributeMap["speed"] ?: "",
+                                    property = attributeMap["property"] ?: "",
+                                    attackType = attributeMap["attackType"] ?: "",
+                                    damageType = attributeMap["damageType"] ?: "",
+                                    src = attributeMap["src"] ?: "",
+                                )
+                            )
+                        }
+                    }
+
+                    "talentDes" -> {
+                        talentList.add(
+                            Talent(
                                 id = attributeMap["id"] ?: "",
-                                spiritId = attributeMap["id"] ?: "",
                                 name = attributeMap["name"] ?: "",
-                                iconSrc = attributeMap["iconSrc"] ?: "",
-                                interest = attributeMap["interest"] ?: "",
-                                color = attributeMap["color"] ?: "",
-                                height = attributeMap["height"] ?: "",
-                                weight = attributeMap["weight"] ?: "",
-                                group = attributeMap["group"] ?: "",
-                                firstID = attributeMap["firstID"] ?: "",
-                                getForm = attributeMap["getForm"] ?: "",
-                                description = attributeMap["description"] ?: "",
-                                sm = attributeMap["sm"] ?: "",
-                                wg = attributeMap["wg"] ?: "",
-                                fy = attributeMap["fy"] ?: "",
-                                mg = attributeMap["mg"] ?: "",
-                                mk = attributeMap["mk"] ?: "",
-                                sd = attributeMap["sd"] ?: "",
-                                evolutionFormID = attributeMap["EvolutionFormID"] ?: "",
-                                evolutionToIDs = attributeMap["EvolutiontoIDs"] ?: "",
-                                endTime = attributeMap["endTime"] ?: "",
-                                expType = attributeMap["expType"] ?: "",
-                                property = attributeMap["features"] ?: "",
-                                habitat = attributeMap["habitat"] ?: "",
-                                isInBook = attributeMap["isInBook"] ?: "",
-                                mType = attributeMap["Mtype"] ?: "",
-                                mspeed = attributeMap["mspeed"] ?: "",
-                                previewSrc = attributeMap["previewSrc"] ?: "",
-                                propoLevel = attributeMap["propoLevel"] ?: "",
-                                skinNum = attributeMap["skinnum"] ?: "",
-                                src = attributeMap["src"] ?: "",
-                                state = attributeMap["state"] ?: "",
-                                catchRate = attributeMap["catchrate"] ?: ""
+                                desc = attributeMap["desc"] ?: "",
                             )
                         )
                     }
                 }
             }
         }
-
-        nodeRegex.findAll(skillConfigContent).forEachIndexed { index, matchResult ->
-            val nodeName = matchResult.groups[1]?.value ?: ""
-            val attributes = matchResult.groups[2]?.value ?: ""
-
-            val keyValueRegex = """(\w+)="([^"]*)"""".toRegex()
-            val attributeMap = mutableMapOf<String, String>()
-            keyValueRegex.findAll(attributes).forEach { result ->
-                val key = result.groups[1]?.value ?: ""
-                val value = result.groups[2]?.value ?: ""
-                attributeMap[key] = value
+        withContext(Dispatchers.IO) {
+            VioletDatabase.db.skillDao().run {
+                upsertSkillAll(skillList)
+                upsertAllTalents(talentList)
             }
-
-            when (nodeName) {
-                "SpiritSkillDes" -> {
-                    val id = attributeMap["id"] ?: ""
-                    if (id.toInt() < 10000) {
-                        skillList.add(
-                            Skill(
-                                id = id,
-                                name = attributeMap["name"] ?: "",
-                                description = attributeMap["description"] ?: "",
-                                power = attributeMap["power"] ?: "",
-                                ppMax = attributeMap["ppMax"] ?: "",
-                                speed = attributeMap["speed"] ?: "",
-                                property = attributeMap["property"] ?: "",
-                                attackType = attributeMap["attackType"] ?: "",
-                                damageType = attributeMap["damageType"] ?: "",
-                                src = attributeMap["src"] ?: "",
-                            )
-                        )
-                    }
-                }
-
-                "talentDes" -> {
-                    talentList.add(
-                        Talent(
-                            id = attributeMap["id"] ?: "",
-                            name = attributeMap["name"] ?: "",
-                            desc = attributeMap["desc"] ?: "",
-                        )
-                    )
-                }
-            }
-        }
-
-        VioletDatabase.db.spiritDao().run {
-            val upsertPropertySize = upsertAllProperty(properties = propertyDesList)
-            val upsertEggGroupSize = upsertAllEggGroup(groups = groupTypeDesList)
-            val upsertSkinSize = upsertAllSkins(skins = spiritSkinDesList)
-            val upsertSpiritSize = upsertAllSpirits(spirits = spiritDesList)
-            upsertAllTalents(talentList)
-        }
-
-        VioletDatabase.db.skillDao().run {
-            upsertSkillAll(skillList)
         }
     }
 

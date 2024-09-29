@@ -98,19 +98,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val defPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val defType = defPreferences.getString(getString(R.string.key_sync_type), "2") // def load from cache file
-        AppData.syncType = when (defType) {
-            SyncType.syncOfServer -> {
-                SyncType.Server
-            }
-            SyncType.syncOfCacheFile -> {
-                SyncType.CacheFile
-            }
-            else -> {
-                SyncType.CacheFile
-            }
-        }
+        initializedSyncType()
 
         viewmodel.spirits.observe(this@MainActivity) {
             mAdapter.isEnd = it.third
@@ -136,6 +124,30 @@ class MainActivity : AppCompatActivity() {
                 SyncAction.Loading -> {
                     showLoading(false)
                 }
+            }
+        }
+    }
+
+    /**
+     * 初始化同步方式
+     */
+    private fun initializedSyncType() {
+        val defPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val defType = defPreferences.getString(
+            getString(R.string.key_sync_type),
+            "2"
+        ) // def load from cache file
+        AppData.syncType = when (defType) {
+            SyncType.syncOfServer -> {
+                SyncType.Server
+            }
+
+            SyncType.syncOfCacheFile -> {
+                SyncType.CacheFile
+            }
+
+            else -> {
+                SyncType.CacheFile
             }
         }
     }
