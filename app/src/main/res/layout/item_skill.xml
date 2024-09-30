@@ -12,11 +12,12 @@
         app:layout_constraintBottom_toBottomOf="@+id/tvDesc"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_width="32dp"
-        android:layout_height="32dp"/>
+        android:layout_height="18dp"/>
 
     <TextView
         android:id="@+id/tvDamageType"
         android:textSize="11sp"
+        android:textColor="@color/dimo_md_theme_primary"
         tools:text="物理"
         android:gravity="center"
         android:layout_marginTop="8dp"
@@ -29,6 +30,7 @@
     <TextView
         android:id="@+id/tvName"
         tools:text="技能名称"
+        android:textColor="@color/dimo_md_theme_primary"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginStart="8dp"
@@ -41,8 +43,7 @@
     <TextView
         android:id="@+id/tvDesc"
         tools:text="技能描述"
-        android:maxLines="2"
-        android:ellipsize="end"
+        android:textColor="@color/dimo_md_theme_primary"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/tvName"
         app:layout_constraintStart_toStartOf="@+id/tvName"
@@ -53,6 +54,7 @@
     <TextView
         android:id="@+id/tvSpeed"
         tools:text="速度:"
+        android:textColor="@color/dimo_md_theme_primary"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@+id/tvDesc"
         app:layout_constraintEnd_toStartOf="@+id/tvPP"
@@ -63,6 +65,7 @@
     <TextView
         android:id="@+id/tvPP"
         tools:text="PP:"
+        android:textColor="@color/dimo_md_theme_primary"
         android:gravity="center_vertical"
         app:layout_constraintStart_toEndOf="@+id/tvSpeed"
         app:layout_constraintEnd_toStartOf="@+id/tvPower"
@@ -73,6 +76,7 @@
 
     <TextView
         android:id="@+id/tvPower"
+        android:textColor="@color/dimo_md_theme_primary"
         tools:text="伤害:"
         app:layout_constraintStart_toEndOf="@+id/tvPP"
         app:layout_constraintTop_toTopOf="@+id/tvSpeed"
