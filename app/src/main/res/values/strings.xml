@@ -5,6 +5,10 @@
     <string name="title_settings">设置</string>
     <string name="title_search">搜索</string>
 
+    <string name="main_nav_spirit">精灵</string>
+    <string name="main_nav_skill">技能</string>
+    <string name="main_nav_extra">其他</string>
+
     <string name="single_str">%s</string>
 
     <string name="p_id">序号:&#160;&#160;%s</string>

@@ -11,8 +11,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.databinding.DataBindingUtil
 import androidx.preference.PreferenceManager
-import com.google.android.material.tabs.TabLayout
 import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.databinding.ActivityMainBinding
 import com.lanier.roco.picturebook.ext.toast
@@ -31,9 +31,7 @@ class MainActivity : AppCompatActivity() {
     private val viewmodel by viewModels<MainViewModel>()
     private var loadingDialog : CommonLoading? = null
 
-    private val binding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
+    private lateinit var binding: ActivityMainBinding
 
     private val switchFragmentHelper by lazy {
         FragmentSwitchHelper(
@@ -41,7 +39,6 @@ class MainActivity : AppCompatActivity() {
             resId = R.id.fragmentContainer,
         )
     }
-    private val tabs = mutableListOf("精灵", "技能")
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_item, menu)
@@ -66,25 +63,13 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    private val onTabSelectedListener = object : TabLayout.OnTabSelectedListener {
-        override fun onTabSelected(tab: TabLayout.Tab) {
-            switchFragmentHelper.switchFra(tab.position)
-        }
-
-        override fun onTabUnselected(tab: TabLayout.Tab?) {
-        }
-
-        override fun onTabReselected(tab: TabLayout.Tab?) {
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
 
@@ -92,26 +77,24 @@ class MainActivity : AppCompatActivity() {
 
         initializedSyncType()
 
-        binding.tvSearch.setOnClickListener {
-            val intent = Intent(this, SearchActivity::class.java)
-            startActivity(intent)
-        }
-        binding.tabLayout.run {
-            tabs.forEach { tabTitle ->
-                addTab(newTab().apply {
-                    text = tabTitle
-                    tag = tabTitle
-                })
-            }
-            addOnTabSelectedListener(onTabSelectedListener)
-        }
-
         switchFragmentHelper.setFragments(
             listOf(
                 FragmentSwitchHelper.SwitchFragment(fragment = SpiritDataFragment.newInstance()),
                 FragmentSwitchHelper.SwitchFragment(fragment = SkillDataFragment.newInstance()),
             )
         )
+
+        binding.tvSearch.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
+        binding.btmNavigation.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu_nav_spirit -> switchFragmentHelper.switchFra(0)
+                R.id.menu_nav_skill -> switchFragmentHelper.switchFra(1)
+            }
+            true
+        }
 
         viewmodel.loadingLiveData.observe(this) {
             if (it) showLoading(false) else dismissLoading()
@@ -123,15 +106,16 @@ class MainActivity : AppCompatActivity() {
                     if (it.success) {
                         toast("同步完成")
                         AppData.SPData.syncTime = System.currentTimeMillis()
-                        viewmodel.load(true)
+                        viewmodel.load()
                     } else {
                         dialog(it.thr?.message?:"Unknown Error", cancelable = false)
                     }
                 }
-                SyncAction.Loading -> {
-                }
+                SyncAction.Loading -> {}
             }
         }
+
+        switchFragmentHelper.switchFra(0)
     }
 
     /**
@@ -194,10 +178,5 @@ class MainActivity : AppCompatActivity() {
 
     private fun dismissLoading() {
         loadingDialog?.dismiss()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding.tabLayout.removeOnTabSelectedListener(onTabSelectedListener)
     }
 }

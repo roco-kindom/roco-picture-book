@@ -20,10 +20,13 @@ import java.util.concurrent.atomic.AtomicBoolean
 class MainViewModel : ViewModel() {
 
     private val limit = 20
-    private var page = 1
-    private var isLoading = AtomicBoolean(false)
+    private var spiritDataPage = 1
+    private var skillDataPage = 1
+    private var isSpiritDataLoading = AtomicBoolean(false)
+    private var isSkillDataLoading = AtomicBoolean(false)
 
-    private var mainLoadJob: Job? = null
+    private var loadSpiritDataJob: Job? = null
+    private var loadSkillDataJob: Job? = null
 
     private val _spirits = MutableLiveData<Triple<Int, List<Spirit>, Boolean>>()
     val spirits: LiveData<Triple<Int, List<Spirit>, Boolean>> = _spirits
@@ -53,18 +56,23 @@ class MainViewModel : ViewModel() {
         )
     }
 
-    fun load(refresh: Boolean = false) {
-        if (isLoading.get()) {
+    fun load() {
+        loadSpirits(true)
+        loadSkills(true)
+    }
+
+    fun loadSpirits(refresh: Boolean = false) {
+        if (isSpiritDataLoading.get()) {
             return
         }
-        val oldJob = mainLoadJob
-        mainLoadJob = launchSafe {
+        val oldJob = loadSpiritDataJob
+        loadSpiritDataJob = launchSafe {
             oldJob?.cancelAndJoin()
-            isLoading.set(true)
-            if (refresh) page = 1
+            isSpiritDataLoading.set(true)
+            if (refresh) spiritDataPage = 1
             val list = ioWithData {
                 val dao = VioletDatabase.db.spiritDao()
-                val spirits = dao.getSpiritsByPage(offset = (page - 1) * limit, limit)
+                val spirits = dao.getSpiritsByPage(offset = (spiritDataPage - 1) * limit, limit)
                 if (spirits.isNotEmpty()) {
                     if (AppData.spiritMaxValidId <= 0) {
                         AppData.spiritMaxValidId = dao.getLatestSpirit().spiritId.toInt()
@@ -80,13 +88,39 @@ class MainViewModel : ViewModel() {
             }
             main {
                 val isEnd = list.size < limit
-                _spirits.value = Triple(page, list, isEnd)
+                _spirits.value = Triple(spiritDataPage, list, isEnd)
                 if (isEnd.not()) {
-                    page++
+                    spiritDataPage++
                 }
             }
-            isLoading.set(false)
-            mainLoadJob = null
+            isSpiritDataLoading.set(false)
+            loadSpiritDataJob = null
+        }
+    }
+
+    fun loadSkills(refresh: Boolean = false) {
+        if (isSkillDataLoading.get()) {
+            return
+        }
+        val oldJob = loadSkillDataJob
+        loadSkillDataJob = launchSafe {
+            oldJob?.cancelAndJoin()
+            isSkillDataLoading.set(true)
+            if (refresh) skillDataPage = 1
+            val list = ioWithData {
+                val dao = VioletDatabase.db.skillDao()
+                val spirits = dao.getSkillByPage(offset = (skillDataPage - 1) * limit, limit)
+                spirits
+            }
+            main {
+                val isEnd = list.size < limit
+                _skills.value = Triple(skillDataPage, list, isEnd)
+                if (isEnd.not()) {
+                    skillDataPage++
+                }
+            }
+            isSkillDataLoading.set(false)
+            loadSkillDataJob = null
         }
     }
 

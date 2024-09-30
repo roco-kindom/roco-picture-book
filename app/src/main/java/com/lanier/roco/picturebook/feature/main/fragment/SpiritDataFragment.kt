@@ -46,7 +46,7 @@ class SpiritDataFragment private constructor(): Fragment() {
 
             onLoadMoreListener = object : OnLoadMoreListener {
                 override fun onLoadMore() {
-                    viewmodel.load()
+                    viewmodel.loadSpirits()
                 }
             }
         }

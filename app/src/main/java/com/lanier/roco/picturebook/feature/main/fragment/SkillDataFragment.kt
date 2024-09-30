@@ -46,6 +46,7 @@ class SkillDataFragment private constructor() : Fragment() {
 
             onLoadMoreListener = object : OnLoadMoreListener {
                 override fun onLoadMore() {
+                    viewmodel.loadSkills()
                 }
             }
         }
@@ -70,6 +71,13 @@ class SkillDataFragment private constructor() : Fragment() {
             )
         )
 
-
+        viewmodel.skills.observe(viewLifecycleOwner) {
+            adapter.isEnd = it.third
+            if (it.first == 1) {
+                adapter.data = it.second
+            } else {
+                adapter.addData(it.second)
+            }
+        }
     }
 }

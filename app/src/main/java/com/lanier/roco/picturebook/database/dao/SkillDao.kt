@@ -48,4 +48,20 @@ interface SkillDao {
      */
     @Query("select * from effect_details where property=:property")
     fun getSkillEffectDetailsByProperty(property: String) : EffectDetails
+
+    @Query(
+        """
+            select * from skill order by rowid desc limit :limit offset :offset
+        """
+    )
+    fun getSkillByPage(offset: Int, limit: Int = 20): List<Skill>
+
+    @Query(
+        """
+            select * from skill
+            where (:exact = 1 and name = :name) or (:exact = 0 and name like '%'||:name||'%')
+            order by rowid desc limit :limit offset :offset
+        """
+    )
+    fun getSkillsByName(name: String, exact: Int = 0, offset: Int, limit: Int = 20): List<Skill>
 }
