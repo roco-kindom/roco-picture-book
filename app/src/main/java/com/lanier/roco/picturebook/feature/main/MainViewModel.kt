@@ -1,8 +1,10 @@
 package com.lanier.roco.picturebook.feature.main
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.lanier.roco.picturebook.database.VioletDatabase
+import com.lanier.roco.picturebook.database.entity.Skill
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.ext.ioWithData
 import com.lanier.roco.picturebook.ext.launchSafe
@@ -23,16 +25,31 @@ class MainViewModel : ViewModel() {
 
     private var mainLoadJob: Job? = null
 
-    val spirits = MutableLiveData<Triple<Int, List<Spirit>, Boolean>>()
-    val syncAction = MutableLiveData<SyncAction>()
+    private val _spirits = MutableLiveData<Triple<Int, List<Spirit>, Boolean>>()
+    val spirits: LiveData<Triple<Int, List<Spirit>, Boolean>> = _spirits
+
+    private val _skills = MutableLiveData<Triple<Int, List<Skill>, Boolean>>()
+    val skills: LiveData<Triple<Int, List<Skill>, Boolean>> = _skills
+
+    private val _syncAction = MutableLiveData<SyncAction>()
+    val syncAction: LiveData<SyncAction> = _syncAction
+
+    private val _loadingLiveData = MutableLiveData<Boolean>()
+    val loadingLiveData: LiveData<Boolean> = _loadingLiveData
 
     fun sync(fromServer: Boolean) {
         DbSyncManager.syncData(
             task = buildSyncTask(),
             forceSync = fromServer,
-            onStart = { syncAction.value = SyncAction.Loading },
+            onStart = {
+                _syncAction.value = SyncAction.Loading
+                _loadingLiveData.value = true
+            },
             onWarning = {},
-            onCompleted = { b, t -> syncAction.value = SyncAction.Completed(b, t) }
+            onCompleted = { b, t ->
+                _syncAction.value = SyncAction.Completed(b, t)
+                _loadingLiveData.value = false
+            }
         )
     }
 
@@ -63,7 +80,7 @@ class MainViewModel : ViewModel() {
             }
             main {
                 val isEnd = list.size < limit
-                spirits.value = Triple(page, list, isEnd)
+                _spirits.value = Triple(page, list, isEnd)
                 if (isEnd.not()) {
                     page++
                 }

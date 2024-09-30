@@ -5,54 +5,43 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayout
 import com.lanier.roco.picturebook.R
-import com.lanier.roco.picturebook.database.entity.Spirit
-import com.lanier.roco.picturebook.ext.launchSafe
+import com.lanier.roco.picturebook.databinding.ActivityMainBinding
 import com.lanier.roco.picturebook.ext.toast
+import com.lanier.roco.picturebook.feature.main.fragment.SkillDataFragment
+import com.lanier.roco.picturebook.feature.main.fragment.SpiritDataFragment
 import com.lanier.roco.picturebook.feature.search.SearchActivity
 import com.lanier.roco.picturebook.feature.setting.SettingsActivity
 import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.manager.SyncAction
 import com.lanier.roco.picturebook.manager.SyncType
+import com.lanier.roco.picturebook.utils.FragmentSwitchHelper
 import com.lanier.roco.picturebook.widget.CommonLoading
-import com.lanier.roco.picturebook.widget.rv.EqualDivider
-import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
-import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
 
 class MainActivity : AppCompatActivity() {
 
     private val viewmodel by viewModels<MainViewModel>()
     private var loadingDialog : CommonLoading? = null
 
-    private val mAdapter by lazy {
-        SpiritAdapter().apply {
-            onItemClickListener = object : OnItemClickListener<Spirit> {
-                override fun onItemClick(t: Spirit, position: Int) {
-                    SpiritShowPopup.show(spirit = t, supportFragmentManager)
-                }
-            }
-
-            onLoadMoreListener = object : OnLoadMoreListener {
-                override fun onLoadMore() {
-                    viewmodel.load()
-                }
-            }
-        }
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private val rv by lazy {
-        findViewById<RecyclerView>(R.id.recyclerview)
+    private val switchFragmentHelper by lazy {
+        FragmentSwitchHelper(
+            fragmentManager = supportFragmentManager,
+            resId = R.id.fragmentContainer,
+        )
     }
+    private val tabs = mutableListOf("精灵", "技能")
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_item, menu)
@@ -77,6 +66,18 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    private val onTabSelectedListener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(tab: TabLayout.Tab) {
+            switchFragmentHelper.switchFra(tab.position)
+        }
+
+        override fun onTabUnselected(tab: TabLayout.Tab?) {
+        }
+
+        override fun onTabReselected(tab: TabLayout.Tab?) {
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -89,30 +90,36 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        rv.adapter = mAdapter
-        val divider = ContextCompat.getDrawable(this, R.drawable.equal_divider)
-        rv.addItemDecoration(EqualDivider(divider!!, 3))
+        initializedSyncType()
 
-        findViewById<TextView>(R.id.tvSearch).setOnClickListener {
+        binding.tvSearch.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
-
-        initializedSyncType()
-
-        viewmodel.spirits.observe(this@MainActivity) {
-            mAdapter.isEnd = it.third
-            if (it.first == 1) {
-                mAdapter.data = it.second
-            } else {
-                mAdapter.addData(it.second)
+        binding.tabLayout.run {
+            tabs.forEach { tabTitle ->
+                addTab(newTab().apply {
+                    text = tabTitle
+                    tag = tabTitle
+                })
             }
+            addOnTabSelectedListener(onTabSelectedListener)
+        }
+
+        switchFragmentHelper.setFragments(
+            listOf(
+                FragmentSwitchHelper.SwitchFragment(fragment = SpiritDataFragment.newInstance()),
+                FragmentSwitchHelper.SwitchFragment(fragment = SkillDataFragment.newInstance()),
+            )
+        )
+
+        viewmodel.loadingLiveData.observe(this) {
+            if (it) showLoading(false) else dismissLoading()
         }
 
         viewmodel.syncAction.observe(this@MainActivity) {
             when (it) {
                 is SyncAction.Completed -> {
-                    dismissLoading()
                     if (it.success) {
                         toast("同步完成")
                         AppData.SPData.syncTime = System.currentTimeMillis()
@@ -122,7 +129,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 SyncAction.Loading -> {
-                    showLoading(false)
                 }
             }
         }
@@ -188,5 +194,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun dismissLoading() {
         loadingDialog?.dismiss()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.tabLayout.removeOnTabSelectedListener(onTabSelectedListener)
     }
 }

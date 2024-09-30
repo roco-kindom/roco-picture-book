@@ -28,4 +28,13 @@
     <string name="spirit_name">名字</string>
     <string name="spirit_group">组</string>
     <string name="spirit_property">属性</string>
+
+    <string name="p_skill_attack_type_1">伤害</string>
+    <string name="p_skill_attack_type_2">非伤害</string>
+    <string name="p_skill_damage_type_1">物理</string>
+    <string name="p_skill_damage_type_2">魔法</string>
+    <string name="p_skill_damage_type_3">变化</string>
+    <string name="p_skill_power">伤害:&#160;&#160;%s</string>
+    <string name="p_skill_pp">PP:&#160;&#160;%s</string>
+    <string name="p_skill_speed">速度:&#160;&#160;%s</string>
 </resources>

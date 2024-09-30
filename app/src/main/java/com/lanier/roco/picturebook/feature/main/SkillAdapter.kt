@@ -4,28 +4,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.google.android.material.imageview.ShapeableImageView
 import com.lanier.roco.picturebook.R
-import com.lanier.roco.picturebook.database.entity.Spirit
-import com.lanier.roco.picturebook.ext.gone
-import com.lanier.roco.picturebook.ext.visible
+import com.lanier.roco.picturebook.database.entity.Skill
 import com.lanier.roco.picturebook.manager.AppData
 import com.lanier.roco.picturebook.widget.rv.LoadEndViewHolder
 import com.lanier.roco.picturebook.widget.rv.LoadingViewHolder
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
 
-class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
+/**
+ * Created by 幻弦让叶
+ * on 2024/9/30, at 20:11
+ *
+ */
+class SkillAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val ITEM_VIEW_TYPE = 0
     private val LOADING_VIEW_TYPE = 1
     private val ITEM_VIEW_END = 2
 
-    private val _data = mutableListOf<Spirit>()
-    var data: List<Spirit>
+    private val _data = mutableListOf<Skill>()
+    var data: List<Skill>
         set(value) {
             _data.clear()
             _data.addAll(value)
@@ -33,17 +35,12 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
         get() = _data
 
-    var onItemClickListener: OnItemClickListener<Spirit>? = null
+    var onItemClickListener: OnItemClickListener<Skill>? = null
     var onLoadMoreListener: OnLoadMoreListener? = null
 
     var isEnd = false
 
-    fun emptyData() {
-        isEnd = true
-        notifyDataSetChanged()
-    }
-
-    fun addData(list: List<Spirit>) {
+    fun addData(list: List<Skill>) {
         val startIndex = itemCount
         _data.addAll(list)
         notifyItemRangeChanged(startIndex, list.size)
@@ -53,7 +50,7 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             recyclerView.layoutManager?.let { layoutManager ->
-                if (layoutManager is GridLayoutManager) {
+                if (layoutManager is LinearLayoutManager) {
                     val totalItemCount = layoutManager.itemCount
                     val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
@@ -77,7 +74,7 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
         recyclerView.removeOnScrollListener(onScrollListener)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             LOADING_VIEW_TYPE -> {
                 LoadingViewHolder(
@@ -85,12 +82,10 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
                         .inflate(R.layout.item_loading, parent, false)
                 )
             }
-            ITEM_VIEW_TYPE -> {
-                SpiritViewHolder(
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.item_spirit, parent, false)
-                )
-            }
+            ITEM_VIEW_TYPE -> SkillViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_skill, parent, false)
+            )
             else -> {
                 LoadEndViewHolder(
                     LayoutInflater.from(parent.context)
@@ -100,15 +95,15 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
     }
 
-    override fun getItemCount() = _data.size + 1
+    override fun getItemCount(): Int = _data.size + 1
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (holder is SpiritViewHolder) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is SkillViewHolder) {
             holder.bind(_data[position])
             holder.itemView.setOnClickListener {
                 onItemClickListener?.onItemClick(
-                    _data[position],
-                    position
+                    t = _data[position],
+                    position = position
                 )
             }
         }
@@ -122,26 +117,28 @@ class SpiritAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 }
 
-class SpiritViewHolder(view: View) : ViewHolder(view) {
+class SkillViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    private val avatar = view.findViewById<ShapeableImageView>(R.id.ivAvatar)
-    private val spiritId = view.findViewById<TextView>(R.id.tvID)
-    private val name = view.findViewById<TextView>(R.id.tvName)
-    private val property1 = view.findViewById<ShapeableImageView>(R.id.ivProperty1)
-    private val property2 = view.findViewById<ShapeableImageView>(R.id.ivProperty2)
+    private val ivProperty = view.findViewById<ShapeableImageView>(R.id.ivProperty)
+    private val tvDamageType = view.findViewById<TextView>(R.id.tvDamageType)
+    private val tvName = view.findViewById<TextView>(R.id.tvName)
+    private val tvDesc = view.findViewById<TextView>(R.id.tvDesc)
+    private val tvSpeed = view.findViewById<TextView>(R.id.tvSpeed)
+    private val tvPP = view.findViewById<TextView>(R.id.tvPP)
+    private val tvPower = view.findViewById<TextView>(R.id.tvPower)
 
-    fun bind(spirit: Spirit) {
-        AppData.loadSpiritAvatar(avatar, spirit.iconSrc)
-        spiritId.text = spirit.spiritId
-        name.text = spirit.name
-        val properties = spirit.property.split(",")
-        if (properties.size == 2) {
-            AppData.loadProperty(property1, properties[0])
-            AppData.loadProperty(property2, properties[1])
-            property2.visible()
-        } else {
-            AppData.loadProperty(property1, spirit.property)
-            property2.gone()
+    fun bind(skill: Skill) {
+        AppData.loadProperty(ivProperty, skill.property)
+        tvDamageType.text = when (skill.damageType) {
+            "1" -> itemView.context.getString(R.string.p_skill_damage_type_1)
+            "2" -> itemView.context.getString(R.string.p_skill_damage_type_2)
+            "3" -> itemView.context.getString(R.string.p_skill_damage_type_3)
+            else -> ""
         }
+        tvName.text = skill.name
+        tvDesc.text = skill.description
+        tvSpeed.text = itemView.context.getString(R.string.p_skill_speed, skill.speed)
+        tvPP.text = itemView.context.getString(R.string.p_skill_pp, skill.ppMax)
+        tvPower.text = itemView.context.getString(R.string.p_skill_power, skill.power)
     }
 }

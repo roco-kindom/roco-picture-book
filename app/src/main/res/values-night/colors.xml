@@ -140,4 +140,6 @@
     <color name="dimo_md_theme_surfaceContainer_highContrast">#1E1F26</color>
     <color name="dimo_md_theme_surfaceContainerHigh_highContrast">#282A30</color>
     <color name="dimo_md_theme_surfaceContainerHighest_highContrast">#33343B</color>
+
+    <color name="skill_info_divider">#33000000</color>
 </resources>
