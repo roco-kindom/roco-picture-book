@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        initializedSyncType()
+        initializedSync()
 
         switchFragmentHelper.setFragments(
             listOf(
@@ -119,9 +119,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 初始化同步方式
+     * 初始化同步相关
      */
-    private fun initializedSyncType() {
+    private fun initializedSync() {
         val defPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val defType = defPreferences.getString(
             getString(R.string.key_sync_type),
@@ -140,6 +140,18 @@ class MainActivity : AppCompatActivity() {
                 SyncType.CacheFile
             }
         }
+        AppData.syncWithSkillConfig = defPreferences.getBoolean(
+            getString(R.string.key_sync_skill),
+            false
+        )
+        AppData.syncWithManorSeedConfig = defPreferences.getBoolean(
+            getString(R.string.key_sync_manor_seeds),
+            false
+        )
+        AppData.syncWithSceneConfig = defPreferences.getBoolean(
+            getString(R.string.key_sync_scene),
+            false
+        )
     }
 
     private fun dialog(

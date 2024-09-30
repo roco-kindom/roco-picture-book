@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lanier.roco.picturebook.database.entity.Skill
 import com.lanier.roco.picturebook.databinding.LayoutCommonRecyclerViewBinding
+import com.lanier.roco.picturebook.ext.launchSafe
 import com.lanier.roco.picturebook.feature.main.MainViewModel
 import com.lanier.roco.picturebook.feature.main.SkillAdapter
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
@@ -71,13 +72,16 @@ class SkillDataFragment private constructor() : Fragment() {
             )
         )
 
-        viewmodel.skills.observe(viewLifecycleOwner) {
-            adapter.isEnd = it.third
-            if (it.first == 1) {
-                adapter.data = it.second
-            } else {
-                adapter.addData(it.second)
-            }
+        launchSafe {
+            viewmodel.skillsFlow
+                .collect {
+                    adapter.isEnd = it.third
+                    if (it.first == 1) {
+                        adapter.data = it.second
+                    } else {
+                        adapter.addData(it.second)
+                    }
+                }
         }
     }
 }

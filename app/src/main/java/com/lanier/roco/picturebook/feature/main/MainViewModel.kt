@@ -15,6 +15,8 @@ import com.lanier.roco.picturebook.manager.SyncAction
 import com.lanier.roco.picturebook.manager.SyncTask
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import java.util.concurrent.atomic.AtomicBoolean
 
 class MainViewModel : ViewModel() {
@@ -31,8 +33,10 @@ class MainViewModel : ViewModel() {
     private val _spirits = MutableLiveData<Triple<Int, List<Spirit>, Boolean>>()
     val spirits: LiveData<Triple<Int, List<Spirit>, Boolean>> = _spirits
 
-    private val _skills = MutableLiveData<Triple<Int, List<Skill>, Boolean>>()
-    val skills: LiveData<Triple<Int, List<Skill>, Boolean>> = _skills
+    private val _skillsFlow = MutableSharedFlow<Triple<Int, List<Skill>, Boolean>>(
+        replay = 5,
+    )
+    val skillsFlow: Flow<Triple<Int, List<Skill>, Boolean>> = _skillsFlow
 
     private val _syncAction = MutableLiveData<SyncAction>()
     val syncAction: LiveData<SyncAction> = _syncAction
@@ -109,12 +113,12 @@ class MainViewModel : ViewModel() {
             if (refresh) skillDataPage = 1
             val list = ioWithData {
                 val dao = VioletDatabase.db.skillDao()
-                val spirits = dao.getSkillByPage(offset = (skillDataPage - 1) * limit, limit)
-                spirits
+                val skills = dao.getSkillByPage(offset = (skillDataPage - 1) * limit, limit)
+                skills
             }
             main {
                 val isEnd = list.size < limit
-                _skills.value = Triple(skillDataPage, list, isEnd)
+                _skillsFlow.tryEmit(Triple(skillDataPage, list, isEnd))
                 if (isEnd.not()) {
                     skillDataPage++
                 }
