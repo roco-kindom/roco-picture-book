@@ -46,9 +46,11 @@ object AppData {
     object SPData {
 
         private const val SP_KEY_SYNC_TIME = "sync_time"
-        private const val SP_KEY_FUZZY_QUERY_BY_NAME = "fuzzy_query_by_name"
+        private const val SP_KEY_FUZZY_QUERY_SPIRIT_BY_NAME = "fuzzy_query_by_name_spirit]"
+        private const val SP_KEY_FUZZY_QUERY_SKILL_BY_NAME = "fuzzy_query_by_name_skill"
 
         var syncTime : Long by SPDelegate(SP_KEY_SYNC_TIME, 0L)
-        var fuzzyQueryByName: Boolean by SPDelegate(SP_KEY_FUZZY_QUERY_BY_NAME, true)
+        var fuzzyQuerySpiritByName: Boolean by SPDelegate(SP_KEY_FUZZY_QUERY_SPIRIT_BY_NAME, true)
+        var fuzzyQuerySkillByName: Boolean by SPDelegate(SP_KEY_FUZZY_QUERY_SKILL_BY_NAME, true)
     }
 }

@@ -14,31 +14,31 @@ import com.lanier.roco.picturebook.database.entity.Talent
 interface SkillDao {
 
     @Insert(entity = Skill::class, onConflict = OnConflictStrategy.REPLACE)
-    fun upsertSkillAll(skills: List<Skill>) : List<Long>
+    fun upsertSkillAll(skills: List<Skill>): List<Long>
 
     @Insert(entity = SkillEffect::class, onConflict = OnConflictStrategy.REPLACE)
-    fun upsertSkillEffectsAll(skillEffects: List<SkillEffect>) : List<Long>
+    fun upsertSkillEffectsAll(skillEffects: List<SkillEffect>): List<Long>
 
     @Insert(entity = EffectDetails::class, onConflict = OnConflictStrategy.REPLACE)
-    fun upsertEffectDetailsAll(details: List<EffectDetails>) : List<Long>
+    fun upsertEffectDetailsAll(details: List<EffectDetails>): List<Long>
 
     @Insert(entity = Talent::class, onConflict = REPLACE)
     fun upsertAllTalents(talents: List<Talent>): List<Long>
 
     @Query("select * from skill where id=:id")
-    fun getSkillById(id: String) : Skill
+    fun getSkillById(id: String): Skill
 
     @Query("select * from skill where name like '%'||:name||'%'")
-    fun getSkillsByName(name: String) : List<Skill>
+    fun getSkillsByName(name: String): List<Skill>
 
     @Query("select * from skill_effect")
-    fun getSkillEffects() : List<SkillEffect>
+    fun getSkillEffects(): List<SkillEffect>
 
     @Query("select * from effect_details")
-    fun getSkillEffectDetails() : List<EffectDetails>
+    fun getSkillEffectDetails(): List<EffectDetails>
 
     @Query("select * from effect_details where id=:id")
-    fun getSkillEffectDetailsById(id: String) : EffectDetails
+    fun getSkillEffectDetailsById(id: String): EffectDetails
 
     @Query("select * from talent")
     fun getAllTalents(): List<Talent>
@@ -47,7 +47,7 @@ interface SkillDao {
      * @param property 与 [skill_effect] 表的 [id] 对应
      */
     @Query("select * from effect_details where property=:property")
-    fun getSkillEffectDetailsByProperty(property: String) : EffectDetails
+    fun getSkillEffectDetailsByProperty(property: String): EffectDetails
 
     @Query(
         """
@@ -60,8 +60,15 @@ interface SkillDao {
         """
             select * from skill
             where (:exact = 1 and name = :name) or (:exact = 0 and name like '%'||:name||'%')
+            and (:propertyId is null or property = :propertyId)
             order by rowid desc limit :limit offset :offset
         """
     )
-    fun getSkillsByName(name: String, exact: Int = 0, offset: Int, limit: Int = 20): List<Skill>
+    fun getSkillsByNameAndOtherFiled(
+        name: String,
+        propertyId: String?,
+        exact: Int = 0,
+        offset: Int,
+        limit: Int = 20
+    ): List<Skill>
 }

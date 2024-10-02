@@ -89,7 +89,7 @@ class SkillAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             else -> {
                 LoadEndViewHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.item_end, parent, false)
+                        .inflate(R.layout.item_end_vertical, parent, false)
                 )
             }
         }

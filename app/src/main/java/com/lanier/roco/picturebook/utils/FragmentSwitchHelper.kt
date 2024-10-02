@@ -9,7 +9,8 @@ class FragmentSwitchHelper(
     private val fragmentManager: FragmentManager
 ) {
 
-    private var showIndex = -1
+    var showIndex = -1
+        private set
 
     private val _fragments = mutableListOf<SwitchFragment>()
 

@@ -7,91 +7,20 @@
 
     </data>
 
-    <ScrollView
+    <LinearLayout
         android:orientation="vertical"
         android:background="@color/dimo_md_theme_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"/>
 
-            <TextView
-                android:padding="8dp"
-                android:textStyle="bold"
-                android:textColor="@color/dimo_md_theme_primary"
-                android:text="@string/spirit_property"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvProperties"
-                android:padding="8dp"
-                tools:listitem="@layout/item_search_opt"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_marginTop="8dp"
-                android:padding="8dp"
-                android:textStyle="bold"
-                android:textColor="@color/dimo_md_theme_primary"
-                android:text="@string/spirit_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvGroups"
-                android:padding="8dp"
-                tools:listitem="@layout/item_search_opt"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_marginTop="8dp"
-                android:padding="8dp"
-                android:textStyle="bold"
-                android:textColor="@color/dimo_md_theme_primary"
-                android:text="@string/persistent_search_configuration"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <CheckBox
-                android:id="@+id/cbSearchById"
-                android:enabled="false"
-                android:paddingHorizontal="8dp"
-                android:layoutDirection="rtl"
-                android:textSize="12sp"
-                android:textColor="@color/dimo_md_theme_outline"
-                android:text="@string/fuzzy_search_by_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <CheckBox
-                android:id="@+id/cbSearchByName"
-                android:paddingHorizontal="8dp"
-                android:layoutDirection="rtl"
-                android:textSize="12sp"
-                android:textColor="@color/dimo_md_theme_primary"
-                android:text="@string/fuzzy_search_by_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnResearch"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/research"
-                app:cornerRadius="25dp"
-                app:icon="@drawable/baseline_search_24"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </ScrollView>
+        <FrameLayout
+            android:id="@+id/childContentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
 </layout>

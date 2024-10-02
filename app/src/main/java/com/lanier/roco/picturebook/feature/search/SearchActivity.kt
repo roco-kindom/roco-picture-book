@@ -15,12 +15,18 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.lanier.roco.picturebook.R
+import com.lanier.roco.picturebook.database.entity.Skill
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.databinding.ActivitySearchBinding
-import com.lanier.roco.picturebook.ext.launchSafe
+import com.lanier.roco.picturebook.feature.main.SkillAdapter
 import com.lanier.roco.picturebook.feature.main.SpiritAdapter
 import com.lanier.roco.picturebook.feature.main.SpiritShowPopup
+import com.lanier.roco.picturebook.feature.search.entity.SearchDataType
+import com.lanier.roco.picturebook.feature.search.fragment.SearchOptFragment
+import com.lanier.roco.picturebook.feature.search.fragment.SearchSpiritOptFragment
 import com.lanier.roco.picturebook.widget.rv.EqualDivider
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
@@ -32,8 +38,16 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private val viewmodel by viewModels<SearchViewModel>()
+    private val searchDataType: SearchDataType by lazy {
+        val type = intent.getIntExtra("searchType", 1)
+        when (type) {
+            1 -> SearchDataType.Spirit
+            2 -> SearchDataType.Skill
+            else -> SearchDataType.Spirit
+        }
+    }
 
-    private val mAdapter by lazy {
+    private val spiritAdapter by lazy {
         SpiritAdapter().apply {
             onItemClickListener = object : OnItemClickListener<Spirit> {
                 override fun onItemClick(t: Spirit, position: Int) {
@@ -41,6 +55,21 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
 
+            onLoadMoreListener = object : OnLoadMoreListener {
+                override fun onLoadMore() {
+                    viewmodel.loadMore()
+                }
+            }
+        }
+    }
+    
+    private val skillAdapter by lazy { 
+        SkillAdapter().apply { 
+            onItemClickListener = object : OnItemClickListener<Skill> {
+                override fun onItemClick(t: Skill, position: Int) {
+                }
+            }
+            
             onLoadMoreListener = object : OnLoadMoreListener {
                 override fun onLoadMore() {
                     viewmodel.loadMore()
@@ -59,18 +88,31 @@ class SearchActivity : AppCompatActivity() {
         }
         setSupportActionBar(binding.toolbar)
 
-        binding.recyclerview.adapter = mAdapter
-        val divider = ContextCompat.getDrawable(this, R.drawable.equal_divider)
-        binding.recyclerview.addItemDecoration(EqualDivider(divider!!, 3))
+        viewmodel.searchDataType = searchDataType
+        
+        when (searchDataType) {
+            SearchDataType.Skill -> {
+                binding.recyclerview.adapter = skillAdapter
+                binding.recyclerview.layoutManager = LinearLayoutManager(this)
+                binding.recyclerview.addItemDecoration(
+                    DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+                )
+            }
+            SearchDataType.Spirit -> {
+                binding.recyclerview.adapter = spiritAdapter
+                val divider = ContextCompat.getDrawable(this, R.drawable.equal_divider)
+                binding.recyclerview.addItemDecoration(EqualDivider(divider!!, 3))
+            }
+        }
 
-        val searchFragment = SearchOptFragment.newInstance()
-        searchFragment.onResearchListener = object : SearchOptFragment.OnResearchListener {
-            override fun onResearch() {
+        val searchFragment = SearchOptFragment.newInstance(searchDataType)
+        searchFragment.onResearchListener = object : ISearchAction {
+            override fun onResearch(type: SearchDataType) {
                 binding.drawerLayout.closeDrawer(GravityCompat.END)
             }
         }
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.flSearchOpt, searchFragment, SearchOptFragment::class.java.simpleName)
+        transaction.add(R.id.flSearchOpt, searchFragment, SearchSpiritOptFragment::class.java.simpleName)
         transaction.commit()
 
         initListener()
@@ -86,13 +128,28 @@ class SearchActivity : AppCompatActivity() {
             }
             return@setOnEditorActionListener true
         }
-
-        viewmodel.spirits.observe(this@SearchActivity) {
-            mAdapter.isEnd = it.third
-            if (it.first == 1) {
-                mAdapter.data = it.second
-            } else {
-                mAdapter.addData(it.second)
+        
+        viewmodel.datas.observe(this) {
+            when (searchDataType) {
+                SearchDataType.Skill -> {
+                    skillAdapter.isEnd = it.third
+                    val data = it.second as List<Skill>
+                    if (it.first == 1) {
+                        skillAdapter.data = data
+                    } else {
+                        skillAdapter.addData(data)
+                    }
+                }
+                SearchDataType.Spirit -> {
+                    spiritAdapter.isEnd = it.third
+                    val data = it.second as List<Spirit>
+                    if (it.first == 1) {
+                        spiritAdapter.data = data
+                    } else {
+                        spiritAdapter.addData(data)
+                    }
+                }
+                null -> {}
             }
         }
     }

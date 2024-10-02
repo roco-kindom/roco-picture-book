@@ -85,7 +85,9 @@ class MainActivity : AppCompatActivity() {
         )
 
         binding.tvSearch.setOnClickListener {
-            val intent = Intent(this, SearchActivity::class.java)
+            val intent = Intent(this, SearchActivity::class.java).apply {
+                putExtra("searchType", switchFragmentHelper.showIndex + 1)
+            }
             startActivity(intent)
         }
         binding.btmNavigation.setOnItemSelectedListener {
