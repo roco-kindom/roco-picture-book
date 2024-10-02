@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="disable_holder_background">#CCFFFFFF</color>
+
     <color name="dimo_md_theme_primary">#1349AE</color>
     <color name="dimo_md_theme_onPrimary">#FFFFFF</color>
     <color name="dimo_md_theme_primaryContainer">#4570D5</color>

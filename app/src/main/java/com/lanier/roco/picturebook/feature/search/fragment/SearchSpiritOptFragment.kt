@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.databinding.FragmentSearchSpiritOptBinding
+import com.lanier.roco.picturebook.ext.visible
 import com.lanier.roco.picturebook.feature.search.ISearchAction
 import com.lanier.roco.picturebook.feature.search.SearchGroupAdapter
 import com.lanier.roco.picturebook.feature.search.SearchPropertyAdapter
@@ -96,6 +97,10 @@ class SearchSpiritOptFragment : Fragment() {
         binding.btnResearch.setOnClickListener {
             onResearchListener?.onResearch(SearchDataType.Spirit)
             viewmodel.research()
+        }
+
+        if (isEnableResearch.not()) {
+            binding.disableHolder.visible()
         }
     }
 }

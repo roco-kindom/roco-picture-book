@@ -1,4 +1,8 @@
 <resources>
+
+
+    <color name="disable_holder_background">#CC000000</color>
+
     <color name="dimo_md_theme_primary">#B2C5FF</color>
     <color name="dimo_md_theme_onPrimary">#002B73</color>
     <color name="dimo_md_theme_primaryContainer">#4570D5</color>

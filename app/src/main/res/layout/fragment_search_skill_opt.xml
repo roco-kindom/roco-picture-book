@@ -7,7 +7,7 @@
 
     </data>
 
-    <ScrollView
+    <RelativeLayout
         android:orientation="vertical"
         android:background="@color/dimo_md_theme_background"
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <TextView
                 android:padding="8dp"
@@ -64,5 +64,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-    </ScrollView>
+
+        <TextView
+            android:id="@+id/disableHolder"
+            android:visibility="gone"
+            android:clickable="true"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/dimo_md_theme_primary"
+            android:gravity="center"
+            android:background="@color/disable_holder_background"
+            android:text="@string/disable_holder_tips"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
 </layout>

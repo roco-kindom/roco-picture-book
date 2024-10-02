@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.databinding.FragmentSearchSkillOptBinding
+import com.lanier.roco.picturebook.ext.visible
 import com.lanier.roco.picturebook.feature.search.ISearchAction
 import com.lanier.roco.picturebook.feature.search.SearchPropertyAdapter
 import com.lanier.roco.picturebook.feature.search.SearchViewModel
@@ -76,6 +77,10 @@ class SearchSkillOptFragment : Fragment() {
         binding.btnResearch.setOnClickListener {
             onResearchListener?.onResearch(SearchDataType.Skill)
             viewmodel.research()
+        }
+
+        if (isEnableResearch.not()) {
+            binding.disableHolder.visible()
         }
     }
 }
