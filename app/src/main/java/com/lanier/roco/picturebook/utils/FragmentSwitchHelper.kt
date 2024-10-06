@@ -12,6 +12,9 @@ class FragmentSwitchHelper(
     var showIndex = -1
         private set
 
+    val fragmentSize: Int
+        get() = _fragments.size
+
     private val _fragments = mutableListOf<SwitchFragment>()
 
     fun setFragments(

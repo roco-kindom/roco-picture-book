@@ -87,6 +87,11 @@ class MainActivity : AppCompatActivity() {
         )
 
         binding.tvSearch.setOnClickListener {
+            val supportIndex = switchFragmentHelper.showIndex != switchFragmentHelper.fragmentSize - 1
+            if (!supportIndex) {
+                toast("暂不支持")
+                return@setOnClickListener
+            }
             val intent = Intent(this, SearchActivity::class.java).apply {
                 putExtra("searchType", switchFragmentHelper.showIndex + 1)
             }
