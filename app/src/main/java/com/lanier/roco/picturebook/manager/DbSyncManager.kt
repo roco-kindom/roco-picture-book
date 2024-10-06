@@ -216,10 +216,10 @@ object DbSyncManager {
         val itemRegex = """<Item>(.*?)</Item>""".toRegex(RegexOption.DOT_MATCHES_ALL)
 
         if (task.withSpiritConfig && spiritConfigContent.isNotBlank()) {
-            processSpiritConfig(nodeRegex, spiritConfigContent)
+//            processSpiritConfig(nodeRegex, spiritConfigContent)
         }
         if (task.withSkillConfig && skillConfigContent.isNotBlank()) {
-            processSkillConfig(nodeRegex, skillConfigContent)
+//            processSkillConfig(nodeRegex, skillConfigContent)
         }
         if (task.withPropConfig && propConfigContent.isNotBlank()) {
             processPropConfig(itemRegex, propConfigContent)

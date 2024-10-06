@@ -11,6 +11,8 @@ object AppData {
 
     const val spiritIconUrl = "https://res.17roco.qq.com/res/combat/icons/"
 
+    const val propIconUrl = "https://res.17roco.qq.com/res/item/"
+
     /**
      * 同步方式
      */
@@ -46,6 +48,10 @@ object AppData {
 
     fun loadProperty(imageView: ImageView, property: String) {
         imageView.load("$propertyIconUrl$property.png")
+    }
+
+    fun loadProp(imageView: ImageView, propId: String) {
+        imageView.load("$propIconUrl$propId.png")
     }
 
     object SPData {

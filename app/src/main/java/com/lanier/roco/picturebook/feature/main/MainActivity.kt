@@ -16,6 +16,7 @@ import androidx.preference.PreferenceManager
 import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.databinding.ActivityMainBinding
 import com.lanier.roco.picturebook.ext.toast
+import com.lanier.roco.picturebook.feature.main.fragment.PropDataFragment
 import com.lanier.roco.picturebook.feature.main.fragment.SkillDataFragment
 import com.lanier.roco.picturebook.feature.main.fragment.SpiritDataFragment
 import com.lanier.roco.picturebook.feature.search.SearchActivity
@@ -81,6 +82,7 @@ class MainActivity : AppCompatActivity() {
             listOf(
                 FragmentSwitchHelper.SwitchFragment(fragment = SpiritDataFragment.newInstance()),
                 FragmentSwitchHelper.SwitchFragment(fragment = SkillDataFragment.newInstance()),
+                FragmentSwitchHelper.SwitchFragment(fragment = PropDataFragment.newInstance()),
             )
         )
 
@@ -94,6 +96,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.menu_nav_spirit -> switchFragmentHelper.switchFra(0)
                 R.id.menu_nav_skill -> switchFragmentHelper.switchFra(1)
+                R.id.menu_nav_prop -> switchFragmentHelper.switchFra(2)
             }
             true
         }

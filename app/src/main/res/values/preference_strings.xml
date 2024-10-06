@@ -24,7 +24,7 @@
     <string name="title_sync_skill">同步技能配置</string>
     <string name="title_sync_skill_summary">技能、天赋</string>
     <string name="title_sync_prop">同步道具配置</string>
-    <string name="title_sync_prop_summary">战斗道具、技能石、服装、魔法装扮、家园/农场装扮、日常/活动道具</string>
+    <string name="title_sync_prop_summary">战斗道具、技能石、服装、种子/作物、魔法装扮、家园/农场装扮、日常/活动道具</string>
     <string name="title_sync_manor_seed">同步农场种子配置</string>
     <string name="title_sync_scene">同步场景配置</string>
 

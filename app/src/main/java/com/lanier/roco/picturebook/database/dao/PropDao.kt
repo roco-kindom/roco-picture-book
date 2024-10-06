@@ -33,7 +33,7 @@ interface PropDao {
     fun getPropOfMedicine(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找咕噜球
@@ -48,7 +48,7 @@ interface PropDao {
     fun getPropOfGuluBall(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找经验果
@@ -61,7 +61,7 @@ interface PropDao {
     fun getPropOfExp(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找天赋糖
@@ -74,7 +74,7 @@ interface PropDao {
     fun getPropOfTalent(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找努力果
@@ -87,7 +87,17 @@ interface PropDao {
     fun getPropOfEndeavor(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
+
+    @Query("""
+        select * from prop
+        where length(id) = 8 and (id like '1736%' or id like '1756%' or id like '1762%')
+        order by rowid limit :limit offset :offset
+    """)
+    fun getPropOfTalentAndEndeavor(
+        offset: Int,
+        limit: Int = 20
+    ): List<Prop>
 
     /**
      * 查找技能石
@@ -100,7 +110,7 @@ interface PropDao {
     fun getPropOfSkillStone(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找服装 - 头部
@@ -115,7 +125,7 @@ interface PropDao {
     fun getDressOfHead(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找服装 - 面部
@@ -130,7 +140,7 @@ interface PropDao {
     fun getDressOfFace(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找服装 - 身体
@@ -145,7 +155,7 @@ interface PropDao {
     fun getDressOfBody(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找服装 - 身体
@@ -160,7 +170,7 @@ interface PropDao {
     fun getDressOfShoe(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找服装 - 背部
@@ -175,7 +185,7 @@ interface PropDao {
     fun getDressOfBack(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找服装 - 左手手持
@@ -190,7 +200,7 @@ interface PropDao {
     fun getDressLeftHand(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找服装 - 右手手持
@@ -205,7 +215,7 @@ interface PropDao {
     fun getDressRightHand(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找表情
@@ -220,7 +230,7 @@ interface PropDao {
     fun getDressOfExpression(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找肤色
@@ -235,7 +245,7 @@ interface PropDao {
     fun getDressOfSkin(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找法阵
@@ -250,7 +260,7 @@ interface PropDao {
     fun getDressOfRingLightSpell(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找魔法装扮
@@ -265,7 +275,7 @@ interface PropDao {
     fun getDressOfMagic(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找脚印
@@ -280,7 +290,7 @@ interface PropDao {
     fun getDressOfFootprint(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找铭牌
@@ -295,7 +305,7 @@ interface PropDao {
     fun getDressOfNameplate(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找冒泡框
@@ -310,7 +320,7 @@ interface PropDao {
     fun getDressOfBubbleBox(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找变形魔法
@@ -325,7 +335,7 @@ interface PropDao {
     fun getPropOfShapeMagic(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找任务道具
@@ -340,7 +350,7 @@ interface PropDao {
     fun getPropOfTask1(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找日常道具
@@ -353,7 +363,7 @@ interface PropDao {
     fun getPropOfDaily1(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找农场种子
@@ -369,7 +379,7 @@ interface PropDao {
     fun getFarmSeeds(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找农场作物
@@ -385,7 +395,7 @@ interface PropDao {
     fun getFarmCrop(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找农场肥料
@@ -401,7 +411,23 @@ interface PropDao {
     fun getFarmFertilizer(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
+
+    /**
+     * 查找农场相关, 不包含装白
+     *
+     * 100859906 - 起始id
+     * 100859909 - 结束id
+     */
+    @Query("""
+        select * from prop
+        where length(id) = 9 and (id like '10072%' or id like '10079%' or id like '10085%' or id like '11750%')
+        order by rowid limit :limit offset :offset
+    """)
+    fun getFarmCorrelationExcludeDress(
+        offset: Int,
+        limit: Int = 20
+    ): List<Prop>
 
     /**
      * 查找农场装扮
@@ -430,7 +456,7 @@ interface PropDao {
     fun getFarmDress(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找农场收获道具
@@ -446,7 +472,7 @@ interface PropDao {
     fun getPropOfHarvest(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 
     /**
      * 查找魔法装扮2
@@ -461,5 +487,5 @@ interface PropDao {
     fun getDressOfMagic2(
         offset: Int,
         limit: Int = 20
-    )
+    ): List<Prop>
 }

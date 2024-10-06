@@ -7,6 +7,7 @@
 
     <string name="main_nav_spirit">精灵</string>
     <string name="main_nav_skill">技能</string>
+    <string name="main_nav_prop">道具</string>
     <string name="main_nav_extra">其他</string>
 
     <string name="single_str">%s</string>
@@ -41,6 +42,8 @@
     <string name="p_skill_power">伤害:&#160;&#160;%s</string>
     <string name="p_skill_pp">PP:&#160;&#160;%s</string>
     <string name="p_skill_speed">速度:&#160;&#160;%s</string>
+
+    <string name="prop_no">编号:&#160;&#160;%s</string>
 
     <string name="disable_holder_tips">不可用</string>
 </resources>
