@@ -2,6 +2,7 @@ package com.lanier.roco.picturebook.manager
 
 import android.os.Build
 import com.lanier.roco.picturebook.database.VioletDatabase
+import com.lanier.roco.picturebook.database.entity.Prop
 import com.lanier.roco.picturebook.database.entity.Property
 import com.lanier.roco.picturebook.database.entity.Skill
 import com.lanier.roco.picturebook.database.entity.Skin
@@ -23,7 +24,8 @@ import java.util.zip.Inflater
 object DbSyncManager {
 
     const val DATABASE_URL = "https://res.17roco.qq.com/conf/Angel.config"
-    private const val UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36"
+    private const val UA =
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36"
 
     private val cacheFilename = "Angel.config"
     var cachePath = ""
@@ -56,13 +58,27 @@ object DbSyncManager {
                 syncFromServer(
                     task = task,
                     onStart = onStart,
-                    onCompleted = { s, t -> withContext(Dispatchers.Main) { onCompleted.invoke(s, t) } },
+                    onCompleted = { s, t ->
+                        withContext(Dispatchers.Main) {
+                            onCompleted.invoke(
+                                s,
+                                t
+                            )
+                        }
+                    },
                 )
             } else {
                 syncFromCache(
                     task = task,
                     onStart = onStart,
-                    onCompleted = { s, t -> withContext(Dispatchers.Main) { onCompleted.invoke(s, t) } },
+                    onCompleted = { s, t ->
+                        withContext(Dispatchers.Main) {
+                            onCompleted.invoke(
+                                s,
+                                t
+                            )
+                        }
+                    },
                 )
             }
         }
@@ -93,7 +109,10 @@ object DbSyncManager {
                     )
                 } else {
                     val responseMessage = connection.responseMessage
-                    onCompleted.invoke(false, Throwable("网络错误 : $responseCode $responseMessage"))
+                    onCompleted.invoke(
+                        false,
+                        Throwable("网络错误 : $responseCode $responseMessage")
+                    )
                 }
             } catch (e: Exception) {
                 onCompleted.invoke(false, Throwable("错误: ${e.message}"))
@@ -180,19 +199,30 @@ object DbSyncManager {
 
     private suspend fun parseContent(task: SyncTask, content: String) {
 
-        val spiritConfigRegex = """<SpiritConfig.*?>(.*?)</SpiritConfig>""".toRegex(RegexOption.DOT_MATCHES_ALL)
+        val spiritConfigRegex =
+            """<SpiritConfig.*?>(.*?)</SpiritConfig>""".toRegex(RegexOption.DOT_MATCHES_ALL)
         val spiritConfigContent = spiritConfigRegex.find(content)?.groups?.get(1)?.value ?: ""
 
-        val skillConfigRegex = """<SpiritSkillConfig.*?>(.*?)</SpiritSkillConfig>""".toRegex(RegexOption.DOT_MATCHES_ALL)
+        val skillConfigRegex =
+            """<SpiritSkillConfig.*?>(.*?)</SpiritSkillConfig>""".toRegex(RegexOption.DOT_MATCHES_ALL)
         val skillConfigContent = skillConfigRegex.find(content)?.groups?.get(1)?.value ?: ""
 
-        val nodeRegex = """<(\w+)\s+(.*?)/>""".toRegex()
+        val propConfigRegex =
+            """<ItemConfig[^>]*>\s*<Items>(.*?)</Items>\s*</ItemConfig>""".toRegex(RegexOption.DOT_MATCHES_ALL)
+        val propConfigContent = propConfigRegex.find(content)?.groups?.get(1)?.value ?: ""
 
-        if (task.withSpiritConfig) {
+        val nodeRegex = """<(\w+)\s+(.*?)/>""".toRegex()
+        // 这里只匹配<Item>节点, 节点内的数据由内部自己处理
+        val itemRegex = """<Item>(.*?)</Item>""".toRegex(RegexOption.DOT_MATCHES_ALL)
+
+        if (task.withSpiritConfig && spiritConfigContent.isNotBlank()) {
             processSpiritConfig(nodeRegex, spiritConfigContent)
         }
-        if (task.withSkillConfig) {
+        if (task.withSkillConfig && skillConfigContent.isNotBlank()) {
             processSkillConfig(nodeRegex, skillConfigContent)
+        }
+        if (task.withPropConfig && propConfigContent.isNotBlank()) {
+            processPropConfig(itemRegex, propConfigContent)
         }
     }
 
@@ -344,6 +374,32 @@ object DbSyncManager {
             VioletDatabase.db.skillDao().run {
                 upsertSkillAll(skillList)
                 upsertAllTalents(talentList)
+            }
+        }
+    }
+
+    private suspend fun processPropConfig(itemRegex: Regex, propConfigContent: String) {
+        val props = mutableListOf<Prop>()
+        withContext(Dispatchers.Default) {
+            itemRegex.findAll(propConfigContent).forEach { matchResult ->
+                val itemContent = matchResult.groupValues[1]
+
+                val idRegex = """<ID>(\d+)</ID>""".toRegex()
+                val nameRegex = """<Name>(.*?)</Name>""".toRegex()
+                val priceRegex = """<Price>(\d+)</Price>""".toRegex()
+                val descRegex = """<Desc><!\[CDATA\[(.*?)]]></Desc>""".toRegex()
+
+                val id = idRegex.find(itemContent)?.groupValues?.get(1) ?: "-1"
+                val name = nameRegex.find(itemContent)?.groupValues?.get(1) ?: ""
+                val price = priceRegex.find(itemContent)?.groupValues?.get(1) ?: ""
+                val desc = descRegex.find(itemContent)?.groupValues?.get(1) ?: ""
+
+                props.add(Prop(id = id, name = name, desc = desc, price = price))
+            }
+        }
+        withContext(Dispatchers.IO) {
+            VioletDatabase.db.propDao().run {
+                upsertAllProps(props)
             }
         }
     }

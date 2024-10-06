@@ -4,6 +4,7 @@
     <string name="key_sync_type">key_sync_type</string>
     <string name="key_last_sync_time">key_last_sync_time</string>
     <string name="key_sync_skill">key_sync_skill</string>
+    <string name="key_sync_props">key_sync_props</string>
     <string name="key_sync_manor_seeds">key_sync_manor_seeds</string>
     <string name="key_sync_scene">key_sync_scene</string>
     <string name="key_sundry_version">key_sundry_version</string>
@@ -22,6 +23,8 @@
     <string name="title_sync_spirit_summary">精灵信息、属性、皮肤、蛋组</string>
     <string name="title_sync_skill">同步技能配置</string>
     <string name="title_sync_skill_summary">技能、天赋</string>
+    <string name="title_sync_prop">同步道具配置</string>
+    <string name="title_sync_prop_summary">战斗道具、技能石、服装、魔法装扮、家园/农场装扮、日常/活动道具</string>
     <string name="title_sync_manor_seed">同步农场种子配置</string>
     <string name="title_sync_scene">同步场景配置</string>
 

@@ -22,6 +22,11 @@ object AppData {
     var syncWithSkillConfig: Boolean = false
 
     /**
+     * 是否同步道具配置
+     */
+    var syncWithPropConfig: Boolean = false
+
+    /**
      * 是否同步农场种子配置
      */
     var syncWithManorSeedConfig: Boolean = false

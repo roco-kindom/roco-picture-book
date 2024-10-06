@@ -146,6 +146,10 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.key_sync_skill),
             false
         )
+        AppData.syncWithPropConfig = defPreferences.getBoolean(
+            getString(R.string.key_sync_props),
+            false
+        )
         AppData.syncWithManorSeedConfig = defPreferences.getBoolean(
             getString(R.string.key_sync_manor_seeds),
             false

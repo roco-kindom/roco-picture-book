@@ -8,6 +8,7 @@ package com.lanier.roco.picturebook.manager
 data class SyncTask(
     val withSpiritConfig: Boolean = true,
     val withSkillConfig: Boolean,
+    val withPropConfig: Boolean,
     val withManorSeedConfig: Boolean,
     val withSceneConfig: Boolean,
 )

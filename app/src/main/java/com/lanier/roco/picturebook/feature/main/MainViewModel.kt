@@ -147,6 +147,7 @@ class MainViewModel : ViewModel() {
     private fun buildSyncTask() = SyncTask(
         withSpiritConfig = true,
         withSkillConfig = AppData.syncWithSkillConfig,
+        withPropConfig = AppData.syncWithPropConfig,
         withManorSeedConfig = AppData.syncWithManorSeedConfig,
         withSceneConfig = AppData.syncWithSceneConfig,
     )
