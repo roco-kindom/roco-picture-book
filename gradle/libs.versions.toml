@@ -3,7 +3,7 @@ minSdk = "29"
 compileSdk = "34"
 targetSdk = "34"
 
-versionCode = "7"
+versionCode = "10"
 versionName = "1.1"
 
 agp = "8.5.2"
