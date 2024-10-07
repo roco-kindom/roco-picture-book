@@ -1,4 +1,4 @@
-package com.lanier.roco.picturebook.feature.main
+package com.lanier.roco.picturebook.feature.main.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,9 +10,9 @@ import com.lanier.roco.picturebook.ext.ioWithData
 import com.lanier.roco.picturebook.ext.launchSafe
 import com.lanier.roco.picturebook.ext.main
 import com.lanier.roco.picturebook.manager.AppData
-import com.lanier.roco.picturebook.manager.DbSyncManager
-import com.lanier.roco.picturebook.manager.SyncAction
-import com.lanier.roco.picturebook.manager.SyncTask
+import com.lanier.roco.picturebook.manager.sync.DbSyncManager
+import com.lanier.roco.picturebook.manager.sync.SyncAction
+import com.lanier.roco.picturebook.manager.sync.SyncTask
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.Flow

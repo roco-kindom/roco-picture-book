@@ -21,8 +21,8 @@ import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.database.entity.Skill
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.databinding.ActivitySearchBinding
-import com.lanier.roco.picturebook.feature.main.SkillAdapter
-import com.lanier.roco.picturebook.feature.main.SpiritAdapter
+import com.lanier.roco.picturebook.feature.main.adapter.SkillAdapter
+import com.lanier.roco.picturebook.feature.main.adapter.SpiritAdapter
 import com.lanier.roco.picturebook.feature.main.SpiritShowPopup
 import com.lanier.roco.picturebook.feature.search.entity.SearchDataType
 import com.lanier.roco.picturebook.feature.search.fragment.SearchOptFragment
@@ -64,7 +64,7 @@ class SearchActivity : AppCompatActivity() {
     }
     
     private val skillAdapter by lazy { 
-        SkillAdapter().apply { 
+        SkillAdapter().apply {
             onItemClickListener = object : OnItemClickListener<Skill> {
                 override fun onItemClick(t: Skill, position: Int) {
                 }

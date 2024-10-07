@@ -1,4 +1,4 @@
-package com.lanier.roco.picturebook.manager
+package com.lanier.roco.picturebook.manager.sync
 
 import android.os.Build
 import com.lanier.roco.picturebook.database.VioletDatabase
@@ -15,8 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File

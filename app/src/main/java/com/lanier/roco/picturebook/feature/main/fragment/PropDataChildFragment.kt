@@ -9,14 +9,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.lanier.roco.picturebook.database.entity.Prop
 import com.lanier.roco.picturebook.databinding.LayoutCommonRecyclerViewBinding
-import com.lanier.roco.picturebook.feature.main.MainViewModel
-import com.lanier.roco.picturebook.feature.main.PropAdapter
+import com.lanier.roco.picturebook.feature.main.viewmodel.MainViewModel
+import com.lanier.roco.picturebook.feature.main.adapter.PropAdapter
 import com.lanier.roco.picturebook.feature.main.PropType
-import com.lanier.roco.picturebook.feature.main.PropViewModel
-import com.lanier.roco.picturebook.manager.SyncAction
-import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
+import com.lanier.roco.picturebook.feature.main.viewmodel.PropViewModel
+import com.lanier.roco.picturebook.manager.sync.SyncAction
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
 
 /**

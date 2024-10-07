@@ -11,7 +11,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.ext.toFormattedString
 import com.lanier.roco.picturebook.manager.AppData
-import com.lanier.roco.picturebook.manager.SyncType
+import com.lanier.roco.picturebook.manager.sync.SyncType
 
 class SettingsFragment : PreferenceFragmentCompat() {
 

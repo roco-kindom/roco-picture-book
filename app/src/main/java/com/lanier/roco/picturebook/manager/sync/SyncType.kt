@@ -1,4 +1,4 @@
-package com.lanier.roco.picturebook.manager
+package com.lanier.roco.picturebook.manager.sync
 
 sealed class SyncType(val type: String) {
 

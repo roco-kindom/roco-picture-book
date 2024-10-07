@@ -1,4 +1,4 @@
-package com.lanier.roco.picturebook.feature.main
+package com.lanier.roco.picturebook.feature.main.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +8,7 @@ import com.lanier.roco.picturebook.database.entity.Prop
 import com.lanier.roco.picturebook.ext.ioWithData
 import com.lanier.roco.picturebook.ext.launchSafe
 import com.lanier.roco.picturebook.ext.main
+import com.lanier.roco.picturebook.feature.main.PropType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import java.util.concurrent.atomic.AtomicBoolean

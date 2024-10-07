@@ -1,4 +1,4 @@
-package com.lanier.roco.picturebook.manager
+package com.lanier.roco.picturebook.manager.sync
 
 /**
  * Created by 幻弦让叶

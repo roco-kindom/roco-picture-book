@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.databinding.LayoutCommonRecyclerViewBinding
-import com.lanier.roco.picturebook.feature.main.MainViewModel
-import com.lanier.roco.picturebook.feature.main.SpiritAdapter
+import com.lanier.roco.picturebook.feature.main.viewmodel.MainViewModel
+import com.lanier.roco.picturebook.feature.main.adapter.SpiritAdapter
 import com.lanier.roco.picturebook.feature.main.SpiritShowPopup
 import com.lanier.roco.picturebook.widget.rv.EqualDivider
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener

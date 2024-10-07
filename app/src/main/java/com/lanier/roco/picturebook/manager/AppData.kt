@@ -4,6 +4,7 @@ import android.widget.ImageView
 import coil.load
 import com.lanier.roco.picturebook.database.entity.Property
 import com.lanier.roco.picturebook.database.entity.SpiritGroup
+import com.lanier.roco.picturebook.manager.sync.SyncType
 
 object AppData {
 

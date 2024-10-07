@@ -19,11 +19,12 @@ import com.lanier.roco.picturebook.ext.toast
 import com.lanier.roco.picturebook.feature.main.fragment.PropDataFragment
 import com.lanier.roco.picturebook.feature.main.fragment.SkillDataFragment
 import com.lanier.roco.picturebook.feature.main.fragment.SpiritDataFragment
+import com.lanier.roco.picturebook.feature.main.viewmodel.MainViewModel
 import com.lanier.roco.picturebook.feature.search.SearchActivity
 import com.lanier.roco.picturebook.feature.setting.SettingsActivity
 import com.lanier.roco.picturebook.manager.AppData
-import com.lanier.roco.picturebook.manager.SyncAction
-import com.lanier.roco.picturebook.manager.SyncType
+import com.lanier.roco.picturebook.manager.sync.SyncAction
+import com.lanier.roco.picturebook.manager.sync.SyncType
 import com.lanier.roco.picturebook.utils.FragmentSwitchHelper
 import com.lanier.roco.picturebook.widget.CommonLoading
 

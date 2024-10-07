@@ -1,4 +1,4 @@
-package com.lanier.roco.picturebook.feature.main
+package com.lanier.roco.picturebook.feature.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

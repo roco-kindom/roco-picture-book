@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.lanier.roco.picturebook.database.entity.Skill
 import com.lanier.roco.picturebook.databinding.LayoutCommonRecyclerViewBinding
 import com.lanier.roco.picturebook.ext.launchSafe
-import com.lanier.roco.picturebook.feature.main.MainViewModel
-import com.lanier.roco.picturebook.feature.main.SkillAdapter
+import com.lanier.roco.picturebook.feature.main.viewmodel.MainViewModel
+import com.lanier.roco.picturebook.feature.main.adapter.SkillAdapter
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
 
