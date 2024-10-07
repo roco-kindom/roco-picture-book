@@ -64,6 +64,7 @@
         <TextView
             android:id="@+id/tvName"
             android:text="@{model.name}"
+            android:textStyle="bold"
             android:layout_marginHorizontal="8dp"
             android:background="@drawable/shape_secondary_container_corner_16"
             android:gravity="center"

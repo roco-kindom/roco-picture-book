@@ -5,6 +5,7 @@
 
     <data>
 
+        <import type="android.text.Html"/>
         <variable
             name="model"
             type="com.lanier.roco.picturebook.database.entity.Prop" />
@@ -41,6 +42,7 @@
             android:id="@+id/tvName"
             tools:text="名称"
             android:text="@{model.name}"
+            android:textStyle="bold"
             android:textColor="@color/dimo_md_theme_primary"
             android:singleLine="true"
             android:ellipsize="end"
@@ -54,7 +56,7 @@
         <TextView
             android:id="@+id/tvDesc"
             tools:text="介绍"
-            android:text="@{model.desc}"
+            android:text="@{Html.fromHtml(model.desc, Html.FROM_HTML_MODE_COMPACT)}"
             android:textColor="@color/dimo_md_theme_primary"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="@+id/tvID"
