@@ -11,16 +11,16 @@ import com.lanier.roco.picturebook.database.entity.Seed
 interface PropDao {
 
     @Insert(entity = Prop::class, onConflict = OnConflictStrategy.REPLACE)
-    fun upsertAllProps(prop: List<Prop>) : List<Long>
+    suspend fun upsertAllProps(prop: List<Prop>) : List<Long>
 
     @Insert(entity = Seed::class, onConflict = OnConflictStrategy.REPLACE)
-    fun upsertAllSeeds(seeds: List<Seed>) : List<Long>
+    suspend fun upsertAllSeeds(seeds: List<Seed>) : List<Long>
 
     @Query("select * from prop where id=:id")
-    fun getPropById(id: String) : Prop
+    suspend fun getPropById(id: String) : Prop
 
     @Query("select * from seed")
-    fun getAllSeeds() : List<Seed>
+    suspend fun getAllSeeds() : List<Seed>
 
     /**
      * 查找药剂道具
@@ -30,7 +30,7 @@ interface PropDao {
         where length(id) = 8 and (id like '1684%' or id like '169%')
         order by rowid limit :limit offset :offset
     """)
-    fun getPropOfMedicine(
+    suspend fun getPropOfMedicine(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -45,7 +45,7 @@ interface PropDao {
         where length(id) = 8 and (id like '1703%' or id = '17301507')
         order by rowid limit :limit offset :offset
     """)
-    fun getPropOfGuluBall(
+    suspend fun getPropOfGuluBall(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -58,7 +58,7 @@ interface PropDao {
         where length(id) = 8 and (id like '1717%' or id like '1723%' or id like '17498%')
         order by rowid limit :limit offset :offset
     """)
-    fun getPropOfExp(
+    suspend fun getPropOfExp(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -71,7 +71,7 @@ interface PropDao {
         where length(id) = 8 and (id like '1736%')
         order by rowid limit :limit offset :offset
     """)
-    fun getPropOfTalent(
+    suspend fun getPropOfTalent(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -84,7 +84,7 @@ interface PropDao {
         where length(id) = 8 and (id like '1756%' or id like '1762%')
         order by rowid limit :limit offset :offset
     """)
-    fun getPropOfEndeavor(
+    suspend fun getPropOfEndeavor(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -94,7 +94,7 @@ interface PropDao {
         where length(id) = 8 and (id like '1736%' or id like '1756%' or id like '1762%')
         order by rowid limit :limit offset :offset
     """)
-    fun getPropOfTalentAndEndeavor(
+    suspend fun getPropOfTalentAndEndeavor(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -107,7 +107,7 @@ interface PropDao {
         where length(id) = 8 and (id like '17432%')
         order by rowid limit :limit offset :offset
     """)
-    fun getPropOfSkillStone(
+    suspend fun getPropOfSkillStone(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -122,7 +122,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3361%' or id like '3362%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfHead(
+    suspend fun getDressOfHead(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -137,7 +137,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3368%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfFace(
+    suspend fun getDressOfFace(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -152,7 +152,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3375%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfBody(
+    suspend fun getDressOfBody(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -167,7 +167,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3381%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfShoe(
+    suspend fun getDressOfShoe(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -182,7 +182,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3388%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfBack(
+    suspend fun getDressOfBack(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -197,7 +197,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3394%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressLeftHand(
+    suspend fun getDressLeftHand(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -212,7 +212,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3401%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressRightHand(
+    suspend fun getDressRightHand(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -227,7 +227,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3407%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfExpression(
+    suspend fun getDressOfExpression(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -242,7 +242,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3414%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfSkin(
+    suspend fun getDressOfSkin(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -257,7 +257,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3420%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfRingLightSpell(
+    suspend fun getDressOfRingLightSpell(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -272,7 +272,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3427%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfMagic(
+    suspend fun getDressOfMagic(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -287,7 +287,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3434%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfFootprint(
+    suspend fun getDressOfFootprint(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -302,7 +302,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3440%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfNameplate(
+    suspend fun getDressOfNameplate(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -317,7 +317,7 @@ interface PropDao {
         where length(id) = 8 and (id like '3447%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfBubbleBox(
+    suspend fun getDressOfBubbleBox(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -332,7 +332,7 @@ interface PropDao {
         where length(id) = 8 and (id like '5039%')
         order by rowid limit :limit offset :offset
     """)
-    fun getPropOfShapeMagic(
+    suspend fun getPropOfShapeMagic(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -347,7 +347,7 @@ interface PropDao {
         where length(id) = 8 and (id like '6717%')
         order by rowid limit :limit offset :offset
     """)
-    fun getPropOfTask1(
+    suspend fun getPropOfTask1(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -360,7 +360,7 @@ interface PropDao {
         where length(id) = 8 and (id like '6723%' or id like '6730%' or id like '6737%')
         order by rowid limit :limit offset :offset
     """)
-    fun getPropOfDaily1(
+    suspend fun getPropOfDaily1(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -376,7 +376,7 @@ interface PropDao {
         where length(id) = 9 and (id like '10072%')
         order by rowid limit :limit offset :offset
     """)
-    fun getFarmSeeds(
+    suspend fun getFarmSeeds(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -392,7 +392,7 @@ interface PropDao {
         where length(id) = 9 and (id like '10079%')
         order by rowid limit :limit offset :offset
     """)
-    fun getFarmCrop(
+    suspend fun getFarmCrop(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -408,7 +408,7 @@ interface PropDao {
         where length(id) = 9 and (id like '10085%')
         order by rowid limit :limit offset :offset
     """)
-    fun getFarmFertilizer(
+    suspend fun getFarmFertilizer(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -424,7 +424,7 @@ interface PropDao {
         where length(id) = 9 and (id like '10072%' or id like '10079%' or id like '10085%' or id like '11750%')
         order by rowid limit :limit offset :offset
     """)
-    fun getFarmCorrelationExcludeDress(
+    suspend fun getFarmCorrelationExcludeDress(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -453,7 +453,7 @@ interface PropDao {
         (id like '10092%' or id like '10099%' or id like '10105%' or id like '10112%' or id like '10118%')
         order by rowid limit :limit offset :offset
     """)
-    fun getFarmDress(
+    suspend fun getFarmDress(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -469,7 +469,7 @@ interface PropDao {
         where length(id) = 9 and (id like '11750%')
         order by rowid limit :limit offset :offset
     """)
-    fun getPropOfHarvest(
+    suspend fun getPropOfHarvest(
         offset: Int,
         limit: Int = 20
     ): List<Prop>
@@ -484,7 +484,7 @@ interface PropDao {
         where length(id) = 9 and (id like '15171%')
         order by rowid limit :limit offset :offset
     """)
-    fun getDressOfMagic2(
+    suspend fun getDressOfMagic2(
         offset: Int,
         limit: Int = 20
     ): List<Prop>

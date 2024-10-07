@@ -10,8 +10,13 @@ import com.lanier.roco.picturebook.database.entity.Spirit
 import com.lanier.roco.picturebook.database.entity.SpiritGroup
 import com.lanier.roco.picturebook.database.entity.Talent
 import com.lanier.roco.picturebook.ext.launchSafe
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -215,14 +220,26 @@ object DbSyncManager {
         // 这里只匹配<Item>节点, 节点内的数据由内部自己处理
         val itemRegex = """<Item>(.*?)</Item>""".toRegex(RegexOption.DOT_MATCHES_ALL)
 
-        if (task.withSpiritConfig && spiritConfigContent.isNotBlank()) {
-            processSpiritConfig(nodeRegex, spiritConfigContent)
-        }
-        if (task.withSkillConfig && skillConfigContent.isNotBlank()) {
-            processSkillConfig(nodeRegex, skillConfigContent)
-        }
-        if (task.withPropConfig && propConfigContent.isNotBlank()) {
-            processPropConfig(itemRegex, propConfigContent)
+        withContext(Dispatchers.Default) {
+            val deferredList = mutableListOf<Deferred<Unit>>()
+
+            if (task.withSpiritConfig && spiritConfigContent.isNotBlank()) {
+                deferredList.add(
+                    async { processSpiritConfig(nodeRegex, spiritConfigContent) }
+                )
+            }
+            if (task.withSkillConfig && skillConfigContent.isNotBlank()) {
+                deferredList.add(
+                    async { processSkillConfig(nodeRegex, skillConfigContent) }
+                )
+            }
+            if (task.withPropConfig && propConfigContent.isNotBlank()) {
+                deferredList.add(
+                    async { processPropConfig(itemRegex, propConfigContent) }
+                )
+            }
+
+            deferredList.awaitAll()
         }
     }
 
@@ -313,10 +330,12 @@ object DbSyncManager {
 
         withContext(Dispatchers.IO) {
             VioletDatabase.db.spiritDao().run {
-                val upsertPropertySize = upsertAllProperty(properties = propertyDesList)
-                val upsertEggGroupSize = upsertAllEggGroup(groups = groupTypeDesList)
-                val upsertSkinSize = upsertAllSkins(skins = spiritSkinDesList)
-                val upsertSpiritSize = upsertAllSpirits(spirits = spiritDesList)
+                val jobs = mutableListOf<Deferred<List<Long>>>()
+                jobs.add(async { upsertAllProperty(properties = propertyDesList) })
+                jobs.add(async { upsertAllEggGroup(groups = groupTypeDesList) })
+                jobs.add(async { upsertAllSkins(skins = spiritSkinDesList) })
+                jobs.add(async { upsertAllSpirits(spirits = spiritDesList) })
+                jobs.awaitAll()
             }
         }
     }
@@ -372,8 +391,10 @@ object DbSyncManager {
         }
         withContext(Dispatchers.IO) {
             VioletDatabase.db.skillDao().run {
-                upsertSkillAll(skillList)
-                upsertAllTalents(talentList)
+                val jobs = mutableListOf<Deferred<List<Long>>>()
+                jobs.add(async { upsertSkillAll(skillList) })
+                jobs.add(async { upsertAllTalents(talentList) })
+                jobs.awaitAll()
             }
         }
     }
@@ -404,9 +425,9 @@ object DbSyncManager {
         }
     }
 
-    private fun calcTime(
+    private suspend fun calcTime(
         printTime: (Long) -> Unit,
-        block: () -> Unit,
+        block: suspend () -> Unit,
     ) {
         val start = System.currentTimeMillis()
         block.invoke()

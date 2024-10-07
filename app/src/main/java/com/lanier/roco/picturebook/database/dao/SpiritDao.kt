@@ -15,65 +15,65 @@ import com.lanier.roco.picturebook.database.entity.Talent
 interface SpiritDao {
 
     @Insert(entity = Spirit::class, onConflict = REPLACE)
-    fun upsertAllSpirits(spirits: List<Spirit>): List<Long>
+    suspend fun upsertAllSpirits(spirits: List<Spirit>): List<Long>
 
     @Insert(entity = Property::class, onConflict = REPLACE)
-    fun upsertAllProperty(properties: List<Property>): List<Long>
+    suspend fun upsertAllProperty(properties: List<Property>): List<Long>
 
     @Insert(entity = SpiritGroup::class, onConflict = REPLACE)
-    fun upsertAllEggGroup(groups: List<SpiritGroup>): List<Long>
+    suspend fun upsertAllEggGroup(groups: List<SpiritGroup>): List<Long>
 
     @Insert(entity = Equipment::class, onConflict = REPLACE)
-    fun upsertAllEquipments(equipments: List<Equipment>): List<Long>
+    suspend fun upsertAllEquipments(equipments: List<Equipment>): List<Long>
 
     @Insert(entity = Skin::class, onConflict = REPLACE)
-    fun upsertAllSkins(skins: List<Skin>): List<Long>
+    suspend fun upsertAllSkins(skins: List<Skin>): List<Long>
 
     @Query("select * from spirit where spirit_id=:id")
-    fun getSpiritById(id: String): Spirit
+    suspend fun getSpiritById(id: String): Spirit
 
     @Query("select * from spirit where name like '%'||:name||'%'")
-    fun getSpiritsByName(name: String): List<Spirit>
+    suspend fun getSpiritsByName(name: String): List<Spirit>
 
     @Query("select * from spirit where group_id=:groupId")
-    fun getSpiritsByGroupId(groupId: String): List<Spirit>
+    suspend fun getSpiritsByGroupId(groupId: String): List<Spirit>
 
     @Query("select * from spirit where property=:propertyId")
-    fun getSpiritsByPropertyId(propertyId: String): List<Spirit>
+    suspend fun getSpiritsByPropertyId(propertyId: String): List<Spirit>
 
     @Query("select * from property")
-    fun getAllProps(): List<Property>
+    suspend fun getAllProps(): List<Property>
 
     @Query("select * from spirit_group")
-    fun getAllEggGroup(): List<SpiritGroup>
+    suspend fun getAllEggGroup(): List<SpiritGroup>
 
     @Query("select * from equipment")
-    fun getAllEquipments(): List<Equipment>
+    suspend fun getAllEquipments(): List<Equipment>
 
     @Query("select * from skin")
-    fun getAllSkins(): List<Skin>
+    suspend fun getAllSkins(): List<Skin>
 
 //    @Query("select * from spirit order by cast(id as integer) desc limit :limit offset :offset")
-//    fun getSpiritsByPage(offset: Int, limit: Int = 20): List<Spirit>
+//    suspend fun getSpiritsByPage(offset: Int, limit: Int = 20): List<Spirit>
 
     @Query("select * from spirit order by rowid desc limit :limit offset :offset")
-    fun getSpiritsByPage(offset: Int, limit: Int = 20): List<Spirit>
+    suspend fun getSpiritsByPage(offset: Int, limit: Int = 20): List<Spirit>
 
     @Deprecated("useless")
     @Query("select * from spirit where(cast(spirit_id as TEXT) like '%'||:searchText||'%' or name like '%'||:searchText||'%' or group_id like '%'||:searchText||'%' or property like '%'||:searchText||'%') order by cast(spirit_id as integer) desc limit :limit offset :offset")
-    fun getSpiritsSearchByAllPage(searchText: String, offset: Int, limit: Int = 20): List<Spirit>
+    suspend fun getSpiritsSearchByAllPage(searchText: String, offset: Int, limit: Int = 20): List<Spirit>
 
     @Deprecated("useless")
     @Query("select * from spirit where cast(spirit_id as TEXT) like '%'||:searchText||'%' order by cast(spirit_id as integer) desc limit :limit offset :offset")
-    fun getSpiritsSearchByIdPage(searchText: String, offset: Int, limit: Int = 20): List<Spirit>
+    suspend fun getSpiritsSearchByIdPage(searchText: String, offset: Int, limit: Int = 20): List<Spirit>
 
     @Deprecated("useless")
     @Query("select * from spirit where name like '%'||:searchText||'%' order by cast(spirit_id as integer) desc limit :limit offset :offset")
-    fun getSpiritsSearchByNamePage(searchText: String, offset: Int, limit: Int = 20): List<Spirit>
+    suspend fun getSpiritsSearchByNamePage(searchText: String, offset: Int, limit: Int = 20): List<Spirit>
 
     @Deprecated("useless")
     @Query("select * from spirit where group_id like '%'||:searchText||'%' order by cast(spirit_id as integer) desc limit :limit offset :offset")
-    fun getSpiritsSearchByGroupIdPage(
+    suspend fun getSpiritsSearchByGroupIdPage(
         searchText: String,
         offset: Int,
         limit: Int = 20
@@ -81,7 +81,7 @@ interface SpiritDao {
 
     @Deprecated("useless")
     @Query("select * from spirit where property like '%'||:searchText||'%' order by cast(spirit_id as integer) desc limit :limit offset :offset")
-    fun getSpiritsSearchByPropertyIdPage(
+    suspend fun getSpiritsSearchByPropertyIdPage(
         searchText: String,
         offset: Int,
         limit: Int = 20
@@ -96,7 +96,7 @@ interface SpiritDao {
         order by rowid desc limit :limit offset :offset
     """
     )
-    fun getSpiritsByIdAndOtherFiled(id: String, propertyId: String?, groupId: String?, offset: Int, limit: Int = 20): List<Spirit>
+    suspend fun getSpiritsByIdAndOtherFiled(id: String, propertyId: String?, groupId: String?, offset: Int, limit: Int = 20): List<Spirit>
 
     @Query(
         """
@@ -107,8 +107,8 @@ interface SpiritDao {
         order by rowid desc limit :limit offset :offset
     """
     )
-    fun getSpiritsByNameAndOtherFiled(name: String, propertyId: String?, groupId: String?, exact: Int = 0, offset: Int, limit: Int = 20): List<Spirit>
+    suspend fun getSpiritsByNameAndOtherFiled(name: String, propertyId: String?, groupId: String?, exact: Int = 0, offset: Int, limit: Int = 20): List<Spirit>
 
     @Query("select * from spirit order by cast(spirit_id as integer) desc limit 1")
-    fun getLatestSpirit(): Spirit
+    suspend fun getLatestSpirit(): Spirit
 }

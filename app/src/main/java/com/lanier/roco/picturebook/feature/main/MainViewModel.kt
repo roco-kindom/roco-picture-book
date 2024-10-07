@@ -128,7 +128,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    private fun loadSpiritGroups() {
+    private suspend fun loadSpiritGroups() {
         val dao = VioletDatabase.db.spiritDao()
         val groups = dao.getAllEggGroup()
         groups.forEachIndexed { index, spiritGroup ->
@@ -136,7 +136,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun loadSpiritProperties() {
+    private suspend fun loadSpiritProperties() {
         val dao = VioletDatabase.db.spiritDao()
         val properties = dao.getAllProps()
         properties.forEachIndexed { index, property ->

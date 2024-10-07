@@ -14,47 +14,47 @@ import com.lanier.roco.picturebook.database.entity.Talent
 interface SkillDao {
 
     @Insert(entity = Skill::class, onConflict = OnConflictStrategy.REPLACE)
-    fun upsertSkillAll(skills: List<Skill>): List<Long>
+    suspend fun upsertSkillAll(skills: List<Skill>): List<Long>
 
     @Insert(entity = SkillEffect::class, onConflict = OnConflictStrategy.REPLACE)
-    fun upsertSkillEffectsAll(skillEffects: List<SkillEffect>): List<Long>
+    suspend fun upsertSkillEffectsAll(skillEffects: List<SkillEffect>): List<Long>
 
     @Insert(entity = EffectDetails::class, onConflict = OnConflictStrategy.REPLACE)
-    fun upsertEffectDetailsAll(details: List<EffectDetails>): List<Long>
+    suspend fun upsertEffectDetailsAll(details: List<EffectDetails>): List<Long>
 
     @Insert(entity = Talent::class, onConflict = REPLACE)
-    fun upsertAllTalents(talents: List<Talent>): List<Long>
+    suspend fun upsertAllTalents(talents: List<Talent>): List<Long>
 
     @Query("select * from skill where id=:id")
-    fun getSkillById(id: String): Skill
+    suspend fun getSkillById(id: String): Skill
 
     @Query("select * from skill where name like '%'||:name||'%'")
-    fun getSkillsByName(name: String): List<Skill>
+    suspend fun getSkillsByName(name: String): List<Skill>
 
     @Query("select * from skill_effect")
-    fun getSkillEffects(): List<SkillEffect>
+    suspend fun getSkillEffects(): List<SkillEffect>
 
     @Query("select * from effect_details")
-    fun getSkillEffectDetails(): List<EffectDetails>
+    suspend fun getSkillEffectDetails(): List<EffectDetails>
 
     @Query("select * from effect_details where id=:id")
-    fun getSkillEffectDetailsById(id: String): EffectDetails
+    suspend fun getSkillEffectDetailsById(id: String): EffectDetails
 
     @Query("select * from talent")
-    fun getAllTalents(): List<Talent>
+    suspend fun getAllTalents(): List<Talent>
 
     /**
      * @param property 与 [skill_effect] 表的 [id] 对应
      */
     @Query("select * from effect_details where property=:property")
-    fun getSkillEffectDetailsByProperty(property: String): EffectDetails
+    suspend fun getSkillEffectDetailsByProperty(property: String): EffectDetails
 
     @Query(
         """
             select * from skill order by rowid desc limit :limit offset :offset
         """
     )
-    fun getSkillByPage(offset: Int, limit: Int = 20): List<Skill>
+    suspend fun getSkillByPage(offset: Int, limit: Int = 20): List<Skill>
 
     @Query(
         """
@@ -64,7 +64,7 @@ interface SkillDao {
             order by rowid desc limit :limit offset :offset
         """
     )
-    fun getSkillsByNameAndOtherFiled(
+    suspend fun getSkillsByNameAndOtherFiled(
         name: String,
         propertyId: String?,
         exact: Int = 0,
