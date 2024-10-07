@@ -1,86 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivProperty"
-        app:layout_constraintTop_toTopOf="@+id/tvName"
-        app:layout_constraintBottom_toBottomOf="@+id/tvDesc"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_width="32dp"
-        android:layout_height="18dp"/>
+    <data>
 
-    <TextView
-        android:id="@+id/tvDamageType"
-        android:textSize="11sp"
-        android:textColor="@color/dimo_md_theme_primary"
-        tools:text="物理"
-        android:gravity="center"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/ivProperty"
-        app:layout_constraintStart_toStartOf="@+id/ivProperty"
-        app:layout_constraintEnd_toEndOf="@+id/ivProperty"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
+        <variable
+            name="model"
+            type="com.lanier.roco.picturebook.database.entity.Skill" />
+    </data>
 
-    <TextView
-        android:id="@+id/tvName"
-        tools:text="技能名称"
-        android:textColor="@color/dimo_md_theme_primary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginStart="8dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ivProperty"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
-    <TextView
-        android:id="@+id/tvDesc"
-        tools:text="技能描述"
-        android:textColor="@color/dimo_md_theme_primary"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/tvName"
-        app:layout_constraintStart_toStartOf="@+id/tvName"
-        app:layout_constraintEnd_toEndOf="@+id/tvName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivProperty"
+            app:layout_constraintTop_toTopOf="@+id/tvName"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDesc"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="32dp"
+            android:layout_height="18dp" />
 
-    <TextView
-        android:id="@+id/tvSpeed"
-        tools:text="速度:"
-        android:textColor="@color/dimo_md_theme_primary"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/tvDesc"
-        app:layout_constraintEnd_toStartOf="@+id/tvPP"
-        app:layout_constraintTop_toBottomOf="@+id/tvDesc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tvDamageType"
+            android:textSize="11sp"
+            android:textColor="@color/dimo_md_theme_primary"
+            tools:text="物理"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/ivProperty"
+            app:layout_constraintStart_toStartOf="@+id/ivProperty"
+            app:layout_constraintEnd_toEndOf="@+id/ivProperty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tvPP"
-        tools:text="PP:"
-        android:textColor="@color/dimo_md_theme_primary"
-        android:gravity="center_vertical"
-        app:layout_constraintStart_toEndOf="@+id/tvSpeed"
-        app:layout_constraintEnd_toStartOf="@+id/tvPower"
-        app:layout_constraintTop_toTopOf="@+id/tvSpeed"
-        app:layout_constraintBottom_toBottomOf="@+id/tvSpeed"
-        android:layout_width="0dp"
-        android:layout_height="0dp"/>
+        <TextView
+            android:id="@+id/tvName"
+            tools:text="技能名称"
+            android:text="@{model.name}"
+            android:textColor="@color/dimo_md_theme_primary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivProperty"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tvPower"
-        android:textColor="@color/dimo_md_theme_primary"
-        tools:text="伤害:"
-        app:layout_constraintStart_toEndOf="@+id/tvPP"
-        app:layout_constraintTop_toTopOf="@+id/tvSpeed"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvDesc"
+            tools:text="技能描述"
+            android:text="@{model.description}"
+            android:textColor="@color/dimo_md_theme_primary"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            app:layout_constraintStart_toStartOf="@+id/tvName"
+            app:layout_constraintEnd_toEndOf="@+id/tvName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvSpeed"
+            tools:text="速度:"
+            android:text="@{String.format(@string/p_skill_speed, model.speed)}"
+            android:textColor="@color/dimo_md_theme_primary"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/tvDesc"
+            app:layout_constraintEnd_toStartOf="@+id/tvPP"
+            app:layout_constraintTop_toBottomOf="@+id/tvDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvPP"
+            tools:text="PP:"
+            android:text="@{String.format(@string/p_skill_pp, model.ppMax)}"
+            android:textColor="@color/dimo_md_theme_primary"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toEndOf="@+id/tvSpeed"
+            app:layout_constraintEnd_toStartOf="@+id/tvPower"
+            app:layout_constraintTop_toTopOf="@+id/tvSpeed"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSpeed"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+
+        <TextView
+            android:id="@+id/tvPower"
+            android:textColor="@color/dimo_md_theme_primary"
+            android:text="@{String.format(@string/p_skill_power, model.power)}"
+            tools:text="伤害:"
+            app:layout_constraintStart_toEndOf="@+id/tvPP"
+            app:layout_constraintTop_toTopOf="@+id/tvSpeed"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

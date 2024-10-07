@@ -58,10 +58,6 @@ class PropDataChildFragment : Fragment() {
 
     private val adapter by lazy {
         PropAdapter().apply {
-            onItemClickListener = object : OnItemClickListener<Prop> {
-                override fun onItemClick(t: Prop, position: Int) {
-                }
-            }
 
             onLoadMoreListener = object : OnLoadMoreListener {
                 override fun onLoadMore() {
