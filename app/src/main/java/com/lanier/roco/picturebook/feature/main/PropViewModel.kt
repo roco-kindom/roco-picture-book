@@ -41,7 +41,6 @@ class PropViewModel : ViewModel() {
             val dao = VioletDatabase.db.propDao()
             val list = ioWithData {
                 val offset = (page - 1) * limit
-                println(">>>> 查 $page $limit $type")
                 when (type) {
                     PropType.Exp -> {
                         dao.getPropOfExp(offset = offset, limit = limit)
@@ -70,7 +69,6 @@ class PropViewModel : ViewModel() {
                     null -> { emptyList() }
                 }
             }
-            println(">>>> $list")
             main {
                 val isEnd = list.size < limit
                 _props.value = Triple(page, list, isEnd)

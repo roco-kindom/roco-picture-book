@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lanier.roco.picturebook.database.entity.Prop
 import com.lanier.roco.picturebook.databinding.LayoutCommonRecyclerViewBinding
+import com.lanier.roco.picturebook.feature.main.MainViewModel
 import com.lanier.roco.picturebook.feature.main.PropAdapter
 import com.lanier.roco.picturebook.feature.main.PropType
 import com.lanier.roco.picturebook.feature.main.PropViewModel
+import com.lanier.roco.picturebook.manager.SyncAction
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
 
@@ -69,6 +72,7 @@ class PropDataChildFragment : Fragment() {
     }
 
     private val viewmodel by viewModels<PropViewModel>()
+    private val mainViewmodel by activityViewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +106,14 @@ class PropDataChildFragment : Fragment() {
                 adapter.data = it.second
             } else {
                 adapter.addData(it.second)
+            }
+        }
+
+        mainViewmodel.syncAction.observe(viewLifecycleOwner) {
+            if (it is SyncAction.Completed) {
+                if (it.success) {
+                    viewmodel.load(true)
+                }
             }
         }
     }
