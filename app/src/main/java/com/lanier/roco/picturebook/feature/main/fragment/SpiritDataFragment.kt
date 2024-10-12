@@ -23,7 +23,7 @@ import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
  * on 2024/9/30, at 18:36
  *
  */
-class SpiritDataFragment private constructor(): Fragment() {
+class SpiritDataFragment : Fragment() {
 
     companion object {
 

@@ -16,7 +16,7 @@ import com.lanier.roco.picturebook.utils.FragmentSwitchHelper
  * Author:  幻弦让叶
  * Date:    2024/10/6 16:39
  */
-class PropDataFragment private constructor(): Fragment() {
+class PropDataFragment : Fragment() {
 
     companion object {
 

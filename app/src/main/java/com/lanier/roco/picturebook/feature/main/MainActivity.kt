@@ -107,6 +107,8 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        binding.btmNavigation.itemIconTintList = null
+
         viewmodel.loadingLiveData.observe(this) {
             if (it) showLoading(false) else dismissLoading()
         }

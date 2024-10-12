@@ -21,7 +21,7 @@ import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
  * on 2024/9/30, at 20:09
  *
  */
-class SkillDataFragment private constructor() : Fragment() {
+class SkillDataFragment : Fragment() {
 
     companion object {
 

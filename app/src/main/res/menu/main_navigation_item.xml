@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/menu_nav_spirit"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_gulu_2"
         android:title="@string/main_nav_spirit"/>
 
     <item android:id="@+id/menu_nav_skill"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_swords"
         android:title="@string/main_nav_skill"/>
 
     <item android:id="@+id/menu_nav_prop"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_leaf"
         android:title="@string/main_nav_prop"/>
 </menu>
