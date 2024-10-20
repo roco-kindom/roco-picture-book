@@ -30,11 +30,6 @@ object AppData {
     var syncWithPropConfig: Boolean = false
 
     /**
-     * 是否同步农场种子配置
-     */
-    var syncWithManorSeedConfig: Boolean = false
-
-    /**
      * 是否同步场景配置
      */
     var syncWithSceneConfig: Boolean = false

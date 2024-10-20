@@ -148,7 +148,6 @@ class MainViewModel : ViewModel() {
         withSpiritConfig = true,
         withSkillConfig = AppData.syncWithSkillConfig,
         withPropConfig = AppData.syncWithPropConfig,
-        withManorSeedConfig = AppData.syncWithManorSeedConfig,
         withSceneConfig = AppData.syncWithSceneConfig,
     )
 }

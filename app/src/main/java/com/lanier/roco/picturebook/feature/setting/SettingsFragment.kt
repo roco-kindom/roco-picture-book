@@ -91,16 +91,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 }
         }
 
-        val choiceOfManorSeedsConfig = preferenceScreen
-            .findPreference<CheckBoxPreference>(getString(R.string.key_sync_manor_seeds))
-        choiceOfManorSeedsConfig?.let {
-            it.onPreferenceChangeListener =
-                Preference.OnPreferenceChangeListener { preference, newValue ->
-                    AppData.syncWithManorSeedConfig = (newValue as? Boolean) ?: false
-                    true
-                }
-        }
-
         val choiceOfScenesConfig = preferenceScreen
             .findPreference<CheckBoxPreference>(getString(R.string.key_sync_scene))
         choiceOfScenesConfig?.let {

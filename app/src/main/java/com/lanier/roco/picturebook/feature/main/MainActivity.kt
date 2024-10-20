@@ -161,10 +161,6 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.key_sync_props),
             false
         )
-        AppData.syncWithManorSeedConfig = defPreferences.getBoolean(
-            getString(R.string.key_sync_manor_seeds),
-            false
-        )
         AppData.syncWithSceneConfig = defPreferences.getBoolean(
             getString(R.string.key_sync_scene),
             false
