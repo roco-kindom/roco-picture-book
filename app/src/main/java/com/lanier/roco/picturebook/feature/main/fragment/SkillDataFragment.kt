@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.database.entity.Skill
 import com.lanier.roco.picturebook.databinding.LayoutCommonRecyclerViewBinding
 import com.lanier.roco.picturebook.ext.launchSafe
@@ -15,6 +16,7 @@ import com.lanier.roco.picturebook.feature.main.viewmodel.MainViewModel
 import com.lanier.roco.picturebook.feature.main.adapter.SkillAdapter
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
+import com.lanier.roco.picturebook.widget.rv.SimpleVerticalDivider
 
 /**
  * Created by 幻弦让叶
@@ -67,8 +69,9 @@ class SkillDataFragment : Fragment() {
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerview.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(), DividerItemDecoration.VERTICAL
+            SimpleVerticalDivider(
+                color = requireContext().getColor(R.color.dimo_md_theme_primary),
+                thickness = 4,
             )
         )
 

@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lanier.roco.picturebook.R
 import com.lanier.roco.picturebook.databinding.LayoutCommonRecyclerViewBinding
 import com.lanier.roco.picturebook.feature.main.viewmodel.MainViewModel
 import com.lanier.roco.picturebook.feature.main.adapter.PropAdapter
@@ -16,6 +17,7 @@ import com.lanier.roco.picturebook.feature.main.PropType
 import com.lanier.roco.picturebook.feature.main.viewmodel.PropViewModel
 import com.lanier.roco.picturebook.manager.sync.SyncAction
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
+import com.lanier.roco.picturebook.widget.rv.SimpleVerticalDivider
 
 /**
  * Desc:
@@ -89,8 +91,9 @@ class PropDataChildFragment : Fragment() {
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerview.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(), DividerItemDecoration.VERTICAL
+            SimpleVerticalDivider(
+                color = requireContext().getColor(R.color.dimo_md_theme_primary),
+                thickness = 4,
             )
         )
 

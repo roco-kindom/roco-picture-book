@@ -30,6 +30,7 @@ import com.lanier.roco.picturebook.feature.search.fragment.SearchSpiritOptFragme
 import com.lanier.roco.picturebook.widget.rv.EqualDivider
 import com.lanier.roco.picturebook.widget.rv.OnItemClickListener
 import com.lanier.roco.picturebook.widget.rv.OnLoadMoreListener
+import com.lanier.roco.picturebook.widget.rv.SimpleVerticalDivider
 
 class SearchActivity : AppCompatActivity() {
 
@@ -95,7 +96,10 @@ class SearchActivity : AppCompatActivity() {
                 binding.recyclerview.adapter = skillAdapter
                 binding.recyclerview.layoutManager = LinearLayoutManager(this)
                 binding.recyclerview.addItemDecoration(
-                    DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+                    SimpleVerticalDivider(
+                        color = getColor(R.color.dimo_md_theme_primary),
+                        thickness = 4,
+                    )
                 )
             }
             SearchDataType.Spirit -> {
